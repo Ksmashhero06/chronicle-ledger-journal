@@ -1,0 +1,29 @@
+{
+  "entities": {
+    "User": {
+      "collection": "users",
+      "fields": {
+        "id": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" }
+      }
+    },
+    "Interaction": {
+      "collection": "users/{userId}/interactions",
+      "fields": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "mode": { "type": "string" },
+        "summary": { "type": "string" },
+        "keyTakeaways": { "type": "array" },
+        "turns": { "type": "array" },
+        "tags": { "type": "array" },
+        "isFavorite": { "type": "boolean" },
+        "latestDualResponse": { "type": "object" },
+        "createdAt": { "type": "number" },
+        "updatedAt": { "type": "number" }
+      }
+    }
+  }
+}
