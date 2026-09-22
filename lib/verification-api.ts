@@ -1,4 +1,4 @@
-import type { Project, TelemetrySummary } from './types';
+import type { Project, TelemetrySummary } from './verification-types';
 
 const API_BASE = 'http://localhost:8000/api';
 

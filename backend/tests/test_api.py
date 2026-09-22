@@ -4,7 +4,7 @@ Chronicle Ledger v2 - End-to-End API Test Suite
 
 import pytest
 from fastapi.testclient import TestClient
-from v2.backend.main import app
+from backend.main import app
 
 client = TestClient(app)
 

@@ -98,12 +98,11 @@ export interface TelemetrySummary {
   total_tokens_processed: number;
   active_model: string;
   recent_traces: Array<{
-    timestamp: string;
+    trace_id: string;
     action: string;
-    model_id: string;
+    model: string;
     latency_ms: number;
-    prompt_tokens: number;
-    completion_tokens: number;
+    timestamp: string;
     status: string;
   }>;
 }

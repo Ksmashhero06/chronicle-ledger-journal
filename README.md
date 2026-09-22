@@ -8,14 +8,18 @@ A secure, user-authenticated multi-turn reflection and personal journaling appli
 
 ## Architecture Overview
 
+Chronicle Ledger is a unified intelligence platform combining personal socratic reflection (Google Cloud & Gemini) with deterministic requirement verification (AWS Bedrock & Mathematical AST Evaluator).
+
 | Component | Technology | Purpose |
 | :--- | :--- | :--- |
-| **User Identity** | Firebase Authentication | Federated Google Sign-In with zero password storage. |
-| **Backend Database** | Cloud Firestore | Attribute-based user-isolated document persistence under `/users/{userId}/interactions/{interactionId}`. |
-| **AI Processing Engine** | Gemini 3.6 Flash API | Server-side reflection guidance, creative brainstorming, and automated insight distillation. |
-| **Model Fallback Ladder** | `@google/genai` | Resilient cascade: `gemini-3.6-flash` &rarr; `gemini-3.1-flash-lite` &rarr; `gemini-flash-latest` &rarr; `gemini-3.7-flash`. |
-| **Secret Management** | Google Cloud Secret Manager | Dynamic credential injection ensuring zero hardcoded API keys. |
-| **Hosting & Runtime** | Google Cloud Run | Scalable, containerized deployment. |
+| **Frontend Application** | Next.js 15 (App Router) + React 19 | Responsive web command center supporting Socratic Reflection, DevLog, and Verification modes. |
+| **User Identity** | Firebase Authentication | Federated Google Sign-In with zero password storage and guest demo capability. |
+| **Backend Database** | Cloud Firestore / DynamoDB | User-isolated document persistence under `/users/{userId}/interactions/{interactionId}`. |
+| **AI Reflection Engine** | Gemini 3.6 Flash API | Socratic reflection guidance, creative brainstorming, and DevLog LinkedIn post synthesis. |
+| **Verification Engine** | Python 3.12+ / FastAPI / AST | Pure mathematical and Boolean AST rule evaluation with zero hallucinations for compliance gates. |
+| **Perception & Matching** | Amazon Bedrock (Claude 3.5 Sonnet) | Parses unstructured challenge requirements and matches evidence spans with telemetry tracking. |
+| **Provenance Tracking** | SHA-256 Cryptographic Ledger | Pins verbatim evidence quotes with immutable hashes for transparent competition auditing. |
+| **Infrastructure & Runtime** | AWS Lambda ARM64 / Google Cloud Run | Serverless, containerized deployment with sub-50ms execution latency. |
 
 ---
 

@@ -1,42 +1,49 @@
 {
-  "current_objective": "Replicate Version 1 authentic UI, authentication flows, and existing features in Version 2",
+  "current_objective": "Relocate all Chronicle Ledger v2 code from isolated v2/ directory to intended root files",
   "steps_completed": [
     {
       "step_number": 1,
-      "action": "Inspected Version 1 codebase and UI structure",
-      "finding": "Version 1 features LandingView with Google Sign-In and Try Instant Demo, AuthProvider, and JournalDashboard with Hide Archive toggle, 2-column layout, search/filters, multi-mode selector, LinkedIn cards, and bottom composer."
+      "action": "Relocated backend to root backend/",
+      "finding": "FastAPI app, AST rule engine, Bedrock perception service, and tests moved to backend/. All 9 tests passed with pytest in 0.39s."
     },
     {
       "step_number": 2,
-      "action": "Constructed AuthContext in v2/frontend/src/context/AuthContext.tsx",
-      "finding": "Enabled authentic Google Sign-In and Demo Judge session persistence."
+      "action": "Relocated infrastructure to root infrastructure/",
+      "finding": "AWS SAM template (ARM64 Lambda, HTTP API Gateway, DynamoDB, Bedrock IAM) and deploy scripts moved to infrastructure/."
     },
     {
       "step_number": 3,
-      "action": "Built LandingView in v2/frontend/src/components/LandingView.tsx",
-      "finding": "Replicated Version 1 landing page with exact #FDFDFD canvas, ChronicleLogo monogram, directive badges, Google Sign-In, Instant Demo, and 3 architecture cards."
+      "action": "Integrated verification modals, types, and APIs into root components/ and lib/",
+      "finding": "Created lib/verification-types.ts, lib/verification-api.ts, components/requirement-modal.tsx, components/evidence-modal.tsx, components/dossier-modal.tsx, and components/telemetry-modal.tsx."
     },
     {
       "step_number": 4,
-      "action": "Built JournalDashboard in v2/frontend/src/components/JournalDashboard.tsx",
-      "finding": "Replicated Version 1 dashboard layout with search, filter pills, recent entries, user profile, multi-mode selector (Verification & Readiness, DevLog, Reflection, Brainstorm, Summary, Freeform), LinkedIn post cards, and added the AWS Deterministic AST Verification Suite."
+      "action": "Integrated Verification & Readiness mode into components/journal-dashboard.tsx",
+      "finding": "Updated JournalMode, added verification banner, AST evaluation cards, and starters directly into root journal dashboard."
     },
     {
       "step_number": 5,
-      "action": "Configured App.tsx authentication gate and verified production build",
-      "finding": "TypeScript compilation passed cleanly in 1.52s with zero errors."
+      "action": "Deleted v2/ folder and updated tsconfig.json and README.md",
+      "finding": "Dissolved v2/ directory, removed v2 from tsconfig exclude, and updated README architecture overview."
     },
     {
       "step_number": 6,
-      "action": "Verified in Chrome browser with browser subagent",
-      "finding": "Successfully validated both LandingView (Google Sign-In, Try Instant Demo) and the authenticated JournalDashboard (Verification & Readiness mode and DevLog LinkedIn card view)."
+      "action": "Validated unified production build and test suites",
+      "finding": "Next.js production build succeeded in 2.7s with zero errors; all 9 pytest backend tests passed with 100% success."
     }
   ],
   "active_files": [
-    "v2/frontend/src/components/LandingView.tsx",
-    "v2/frontend/src/components/JournalDashboard.tsx",
-    "v2/frontend/src/context/AuthContext.tsx",
-    "v2/frontend/src/App.tsx"
+    "backend/",
+    "infrastructure/",
+    "components/journal-dashboard.tsx",
+    "components/requirement-modal.tsx",
+    "components/evidence-modal.tsx",
+    "components/dossier-modal.tsx",
+    "components/telemetry-modal.tsx",
+    "lib/verification-types.ts",
+    "lib/verification-api.ts",
+    ".agent_code_map.md",
+    ".agent_journal.json"
   ],
-  "next_step": "Present the completed Version 1 UI replication and features in Version 2 to the user."
+  "next_step": "Stage, commit, and push the unified codebase to GitHub."
 }

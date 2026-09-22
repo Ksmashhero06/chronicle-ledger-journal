@@ -1,4 +1,4 @@
-export type JournalMode = 'reflection' | 'summary' | 'brainstorm' | 'dialogue' | 'freeform' | 'devlog';
+export type JournalMode = 'reflection' | 'summary' | 'brainstorm' | 'dialogue' | 'freeform' | 'devlog' | 'verification';
 
 export interface TurnMessage {
   id: string;
@@ -7,6 +7,16 @@ export interface TurnMessage {
   timestamp: number;
   modelUsed?: string;
   dualResponse?: DualCognitiveResponse;
+  verificationResult?: {
+    req_id: string;
+    rule_name: string;
+    status: 'PROVEN_TRUE' | 'FAIL' | 'INSUFFICIENT_EVIDENCE';
+    ast_expression: string;
+    extracted_facts: Record<string, any>;
+    verbatim_quote: string;
+    evidence_fingerprint: string;
+    explanation: string;
+  };
 }
 
 export interface DualCognitiveResponse {

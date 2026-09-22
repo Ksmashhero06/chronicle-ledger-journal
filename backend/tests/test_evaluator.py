@@ -3,14 +3,14 @@ Chronicle Ledger v2 - Test Suite for Deterministic Verification Engine
 """
 
 import pytest
-from v2.backend.engine.rule_schema import (
+from backend.engine.rule_schema import (
     RuleType,
     NumericOperator,
     VerificationStatus,
     Requirement,
     ProvenanceCitation,
 )
-from v2.backend.engine.deterministic_evaluator import (
+from backend.engine.deterministic_evaluator import (
     verify_requirement,
     compute_readiness_score,
 )
