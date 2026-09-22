@@ -1,6 +1,6 @@
 {
   "name": "Chronicle Ledger",
-  "description": "Chronicle Ledger — Production Directives v2.4 Active. A secure, user-authenticated journaling and multi-turn intelligence system powered by Gemini and Cloud Firestore with strict per-user data isolation.",
+  "description": "Chronicle Ledger v2: Evidence-grounded requirement verification and developer journal powered by AWS Bedrock, Python AST rule engine, and Gemini.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

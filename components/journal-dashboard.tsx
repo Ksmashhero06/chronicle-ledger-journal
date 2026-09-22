@@ -555,7 +555,7 @@ export function JournalDashboard() {
             <ChronicleLogo size={32} />
             <div className="min-w-0">
               <h1 className="text-base sm:text-lg font-medium tracking-tight text-[#111111] truncate">Chronicle Ledger</h1>
-              <p className="text-[10px] sm:text-[11px] text-[#888888] font-mono mt-0.5 truncate">Production Directives v2.4 Active</p>
+              <p className="text-[10px] sm:text-[11px] text-[#888888] font-mono mt-0.5 truncate">v2.0 • Requirement Verification & Journal</p>
             </div>
           </div>
         )}

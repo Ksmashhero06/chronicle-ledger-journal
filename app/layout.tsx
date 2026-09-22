@@ -3,7 +3,7 @@ import './globals.css'; // Global styles
 
 export const metadata: Metadata = {
   title: 'Chronicle Ledger',
-  description: 'Chronicle Ledger — Production Directives v2.4 Active',
+  description: 'Chronicle Ledger v2 — Requirement verification and developer journal',
   icons: {
     icon: '/logo.svg',
     shortcut: '/logo.svg',
@@ -11,13 +11,13 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Chronicle Ledger',
-    description: 'Chronicle Ledger — Production Directives v2.4 Active',
+    description: 'Chronicle Ledger v2 — Requirement verification and developer journal',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Chronicle Ledger',
-    description: 'Chronicle Ledger — Production Directives v2.4 Active',
+    description: 'Chronicle Ledger v2 — Requirement verification and developer journal',
   },
 };
 
