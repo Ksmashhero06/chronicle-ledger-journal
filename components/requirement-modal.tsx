@@ -45,7 +45,7 @@ export const RequirementModal: React.FC<RequirementModalProps> = ({
           <div className="flex items-center gap-2">
             <FileText className="w-5 h-5 text-[#111111]" />
             <h3 className="text-base font-semibold text-[#111111]">
-              Ingest Competition Guidelines & Rules
+              Add Requirements & Rules
             </h3>
           </div>
           <button
@@ -59,14 +59,14 @@ export const RequirementModal: React.FC<RequirementModalProps> = ({
         <div className="p-6 space-y-4">
           <div className="flex items-center justify-between">
             <label className="text-xs font-semibold text-[#444444] uppercase tracking-wide">
-              Raw Guidelines / Challenge Brief
+              Guidelines / Rubric Text
             </label>
             <button
               onClick={() => setText(SAMPLE_AWS_REQUIREMENTS)}
               className="inline-flex items-center gap-1.5 text-xs text-[#06B6D4] hover:text-[#0891B2] font-medium cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Load Zero to Shipped 2026 Sample</span>
+              <span>Load Zero to Shipped Sample</span>
             </button>
           </div>
 
@@ -79,7 +79,7 @@ export const RequirementModal: React.FC<RequirementModalProps> = ({
           />
 
           <p className="text-[11px] text-[#888888] leading-relaxed">
-            Amazon Bedrock parses unstructured text into formal AST rules with zero LLM hallucination in final pass/fail evaluations.
+            Bedrock parses unstructured text into structured rules. The Python rule engine then evaluates evidence deterministically against those rules.
           </p>
         </div>
 
@@ -96,7 +96,7 @@ export const RequirementModal: React.FC<RequirementModalProps> = ({
             disabled={loading || !text.trim()}
             className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#111111] hover:bg-black text-white text-xs font-medium cursor-pointer disabled:opacity-50"
           >
-            {loading ? 'Ingesting Rules...' : 'Extract & Compile AST Rules'}
+            {loading ? 'Extracting Rules...' : 'Extract Rules'}
           </button>
         </div>
       </div>

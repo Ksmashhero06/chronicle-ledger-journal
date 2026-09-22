@@ -29,7 +29,7 @@ from .services.provenance_service import compute_sha256_text
 
 app = FastAPI(
     title="Chronicle Ledger v2 API",
-    description="AWS-Native Evidence-Grounded Requirement Verification & Submission Readiness Platform",
+    description="Requirement verification and readiness evaluation API",
     version="2.0.0",
 )
 

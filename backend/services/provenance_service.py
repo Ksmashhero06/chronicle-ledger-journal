@@ -1,7 +1,7 @@
 """
-Chronicle Ledger v2 - Provenance & Cryptographic Audit Service
-Fingerprints evidence documents (SHA-256), locates verbatim citation spans,
-and maintains tamper-evident audit event chains.
+Evidence hashing and text span locator service.
+Computes SHA-256 digests for evidence artifacts and locates exact character
+offsets for extracted citations.
 """
 
 import hashlib

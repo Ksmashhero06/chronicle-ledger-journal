@@ -1,8 +1,7 @@
 """
-Chronicle Ledger v2 - Amazon Bedrock & AI Perception Service
-Parses unstructured requirement documents into formal Pydantic rule schemas,
-and extracts candidate fact citations from evidence artifacts.
-Includes live telemetry tracking for the AWS Builder Center Agent requirement.
+Amazon Bedrock integration service.
+Uses Claude on Bedrock to extract structured fields and text spans from
+unstructured requirements documents and evidence logs.
 """
 
 import json

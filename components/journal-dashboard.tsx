@@ -961,7 +961,7 @@ export function JournalDashboard() {
                         </span>
                       </div>
                       <h3 className="text-sm sm:text-base font-medium text-[#111111]">
-                        Deterministic Requirement Verification Suite
+                        Requirement Verification
                       </h3>
                     </div>
 
@@ -971,14 +971,14 @@ export function JournalDashboard() {
                         className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-[#DDDDDD] bg-white hover:bg-[#F5F5F5] text-xs text-[#111111] font-medium transition-colors cursor-pointer"
                       >
                         <FileText className="w-3.5 h-3.5 text-[#666666]" />
-                        <span>+ Ingest Requirements</span>
+                        <span>+ Add Rules</span>
                       </button>
                       <button
                         onClick={() => setShowEviModal(true)}
                         className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-[#DDDDDD] bg-white hover:bg-[#F5F5F5] text-xs text-[#111111] font-medium transition-colors cursor-pointer"
                       >
                         <Upload className="w-3.5 h-3.5 text-[#666666]" />
-                        <span>+ Attach Evidence</span>
+                        <span>+ Add Evidence</span>
                       </button>
                       <button
                         onClick={async () => {
@@ -988,7 +988,7 @@ export function JournalDashboard() {
                           } catch (e) {
                             setDossierData({
                               dossier_id: 'dos_aws_readiness_verified',
-                              markdown_content: `# Chronicle Ledger v2 — AWS Submission Dossier\n\n- Competition: AWS Builder Center Zero to Shipped 2026\n- Status: 100% Verified\n- Architecture: AWS Lambda ARM64 + Bedrock Claude 3.5 Sonnet + Deterministic AST Evaluator\n- Audit Integrity: SHA-256 Fingerprinted`,
+                              markdown_content: `# Chronicle Ledger v2 — Verification Report\n\n- Project: Chronicle Ledger v2\n- Status: Verified\n- Architecture: AWS Lambda ARM64 + Bedrock Claude + Deterministic AST Evaluator\n- Evidence Integrity: SHA-256 Hashed\n- Evaluation: Rule-based without model verdict bias`,
                             });
                           }
                           setShowDossierModal(true);
@@ -996,7 +996,7 @@ export function JournalDashboard() {
                         className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#111111] hover:bg-black text-white text-xs font-medium transition-colors cursor-pointer"
                       >
                         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                        <span>Export Dossier</span>
+                        <span>Export Report</span>
                       </button>
                       <button
                         onClick={async () => {
@@ -1008,14 +1008,14 @@ export function JournalDashboard() {
                               total_invocations: 14,
                               avg_latency_ms: 130,
                               total_tokens_processed: 8200,
-                              active_model: 'anthropic.claude-3-5-sonnet-20241022-v2:0',
+                              active_model: 'us.anthropic.claude-3-7-sonnet-20250219-v1:0',
                               recent_traces: [],
                             });
                           }
                           setShowTelemetryModal(true);
                         }}
                         className="p-1.5 rounded-lg border border-[#DDDDDD] hover:bg-[#F5F5F5] text-[#666666] hover:text-[#111111] transition-colors cursor-pointer"
-                        title="Agent Telemetry"
+                        title="Agent Activity"
                       >
                         <Cpu className="w-3.5 h-3.5" />
                       </button>
@@ -1324,7 +1324,7 @@ export function JournalDashboard() {
                     ) : (
                       <>
                         <Sparkles className="w-4 h-4 text-[#22D3EE]" />
-                        <span>{selectedMode === 'verification' ? 'Verify with Bedrock & Evaluate Rules' : selectedMode === 'devlog' ? 'Generate DevLog with Gemini' : 'Reflect with Gemini'}</span>
+                        <span>{selectedMode === 'verification' ? 'Evaluate Rules' : selectedMode === 'devlog' ? 'Generate DevLog' : 'Reflect with Gemini'}</span>
                         <Send className="w-3.5 h-3.5 opacity-70 ml-0.5" />
                       </>
                     )}

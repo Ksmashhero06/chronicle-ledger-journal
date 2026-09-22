@@ -45,7 +45,7 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
           <div className="flex items-center gap-2">
             <Upload className="w-5 h-5 text-[#111111]" />
             <h3 className="text-base font-semibold text-[#111111]">
-              Attach Evidence Artifact
+              Attach Evidence
             </h3>
           </div>
           <button
@@ -88,14 +88,14 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
 
           <div className="flex items-center justify-between">
             <label className="text-[11px] font-semibold text-[#444444] uppercase tracking-wide">
-              Raw Evidence Content
+              Evidence Content
             </label>
             <button
               onClick={() => setContent(SAMPLE_EVIDENCE)}
               className="inline-flex items-center gap-1.5 text-xs text-[#06B6D4] hover:text-[#0891B2] font-medium cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Load Zero to Shipped 2026 Sample</span>
+              <span>Load Sample Evidence</span>
             </button>
           </div>
 
@@ -108,7 +108,7 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
           />
 
           <p className="text-[11px] text-[#888888] leading-relaxed">
-            All evidence artifacts are cryptographically fingerprinted using SHA-256 with exact verbatim character offsets.
+            Evidence is hashed with SHA-256 upon ingestion. Character offsets are saved so reviewers can inspect the exact source span.
           </p>
         </div>
 
@@ -125,7 +125,7 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
             disabled={loading || !content.trim()}
             className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#111111] hover:bg-black text-white text-xs font-medium cursor-pointer disabled:opacity-50"
           >
-            {loading ? 'Fingerprinting...' : 'Fingerprint & Store Evidence'}
+            {loading ? 'Saving...' : 'Save Evidence'}
           </button>
         </div>
       </div>

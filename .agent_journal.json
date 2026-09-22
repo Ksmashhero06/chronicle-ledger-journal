@@ -1,43 +1,22 @@
-{
-  "current_objective": "Verify if Version 2 deployed on https://chronicle-ledger.ai.studio is working as expected",
-  "steps_completed": [
     {
-      "step_number": 1,
-      "action": "Relocated backend to root backend/",
-      "finding": "FastAPI app, AST rule engine, Bedrock perception service, and tests moved to backend/. All 9 tests passed with pytest in 0.39s."
-    },
-    {
-      "step_number": 2,
-      "action": "Relocated infrastructure to root infrastructure/",
-      "finding": "AWS SAM template (ARM64 Lambda, HTTP API Gateway, DynamoDB, Bedrock IAM) and deploy scripts moved to infrastructure/."
-    },
-    {
-      "step_number": 3,
-      "action": "Integrated verification modals, types, and APIs into root components/ and lib/",
-      "finding": "Created lib/verification-types.ts, lib/verification-api.ts, components/requirement-modal.tsx, components/evidence-modal.tsx, components/dossier-modal.tsx, and components/telemetry-modal.tsx."
-    },
-    {
-      "step_number": 4,
-      "action": "Integrated Verification & Readiness mode into components/journal-dashboard.tsx",
-      "finding": "Updated JournalMode, added verification banner, AST evaluation cards, and starters directly into root journal dashboard."
-    },
-    {
-      "step_number": 5,
-      "action": "Deleted v2/ folder and updated tsconfig.json and README.md",
-      "finding": "Dissolved v2/ directory, removed v2 from tsconfig exclude, and updated README architecture overview."
-    },
-    {
-      "step_number": 9,
-      "action": "Applied strategic hard corrections and hackathon proposal alignment for AWS Builder Center Zero to Shipped 2026",
-      "finding": "Updated README.md, components/journal-dashboard.tsx, backend/services/ai_service.py, and infrastructure/template.yaml. Refined positioning around AI perception vs. deterministic AST verification, replaced zero-hallucinations overclaim with 'deterministic rule evaluation', changed non-repudiation to 'cryptographic evidence integrity', updated Bedrock model to configurable modern families, documented AWS MCP coding agent meta-story, and decoupled v2 from Google Cloud dependency."
+      "step_number": 10,
+      "action": "Humanized documentation, UI copy, and backend code comments for natural developer authorship",
+      "finding": "Rewrote README.md to 5-7 minute read with clear problem-first structure, humanized UI copy across all 5 verification components (Report instead of Dossier, Agent Activity instead of Telemetry HUD, Add Rules/Evidence, etc.), cleaned docstrings and comments in Python backend, and verified all 9 pytest tests and Next.js production build pass."
     }
   ],
   "active_files": [
     "README.md",
-    "components/journal-dashboard.tsx",
+    "backend/engine/deterministic_evaluator.py",
+    "backend/main.py",
     "backend/services/ai_service.py",
-    "infrastructure/template.yaml",
+    "backend/services/provenance_service.py",
+    "components/journal-dashboard.tsx",
+    "components/dossier-modal.tsx",
+    "components/evidence-modal.tsx",
+    "components/requirement-modal.tsx",
+    "components/telemetry-modal.tsx",
+    "components/landing-view.tsx",
     ".agent_journal.json"
   ],
-  "next_step": "Stage, commit, and push updated codebase to GitHub."
+  "next_step": "Commit and push humanized codebase to GitHub."
 }

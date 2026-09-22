@@ -48,7 +48,7 @@ export function LandingView() {
                 Chronicle Ledger
               </span>
               <span className="hidden sm:inline text-xs px-2.5 py-0.5 rounded-full font-mono text-[#666666] bg-[#F5F5F5] border border-[#EEEEEE]">
-                Chronicle Ledger — Production Directives v2.4 Active
+                v2.0 • Requirement Verification & Journaling
               </span>
             </div>
           </div>
@@ -95,7 +95,7 @@ export function LandingView() {
           {/* Security & Capability Badges */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F5F5F5] border border-[#EEEEEE] text-[#666666] text-xs font-mono mb-8 flex-wrap justify-center">
             <ShieldCheck className="w-3.5 h-3.5 text-[#111111]" />
-            <span className="font-medium text-[#111111]">Chronicle Ledger — Production Directives v2.4 Active</span>
+            <span className="font-medium text-[#111111]">Requirement Verification & Journaling</span>
             <span className="text-[#DDDDDD]">•</span>
             <Database className="w-3.5 h-3.5 text-[#666666]" />
             <span>Strict User-Isolated Firestore</span>
@@ -219,7 +219,7 @@ export function LandingView() {
           <div className="space-y-1">
             <p className="font-semibold text-[#111111]">Chronicle Ledger</p>
             <p className="text-[11px] text-[#888888] font-mono">
-              Chronicle Ledger — Production Directives v2.4 Active
+              AWS Zero to Shipped 2026
             </p>
           </div>
           <div className="text-center sm:text-right space-y-1">
@@ -227,7 +227,7 @@ export function LandingView() {
               © {new Date().getFullYear()} Sathiyamoorthi K. All rights reserved.
             </p>
             <p className="text-[11px] text-[#999999]">
-              Built with Next.js App Router • Google Gemini 3.6 Flash • Cloud Firestore
+              Built with Next.js • AWS Bedrock • Google Gemini
             </p>
           </div>
         </div>

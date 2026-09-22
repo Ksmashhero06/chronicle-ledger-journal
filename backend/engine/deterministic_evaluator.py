@@ -1,7 +1,7 @@
 """
-Chronicle Ledger v2 - Deterministic AST & Logic Verification Engine
-Executes strict, zero-hallucination mathematical, presence, boolean, and version
-rules on AI-extracted evidence citations.
+Chronicle Ledger v2 - Rule Evaluation Engine
+Evaluates mathematical, presence, boolean, and version constraints against
+structured values extracted from evidence documents.
 """
 
 import datetime
