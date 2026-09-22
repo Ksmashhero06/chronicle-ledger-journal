@@ -284,7 +284,7 @@ export function JournalDashboard() {
             },
             verbatim_quote: '"commit 3cf8e... Initial commit Chronicle Ledger v2 Architecture"',
             evidence_fingerprint: 'sha256:3d9c8b7462fa...e02b',
-            explanation: 'Evaluation engine parsed repository metadata. All boolean conditions evaluate to TRUE with zero hallucinations.',
+            explanation: 'Evaluation engine parsed repository metadata. All boolean conditions evaluate to TRUE via deterministic AST evaluation.',
           };
         }
 
@@ -1161,8 +1161,8 @@ export function JournalDashboard() {
                                   <span className="truncate max-w-[280px]">
                                     Hash: {turn.verificationResult.evidence_fingerprint}
                                   </span>
-                                  <span className="text-emerald-600 font-semibold">
-                                    ZERO HALLUCINATIONS GUARANTEED
+                                  <span className="text-emerald-700 font-semibold tracking-wider">
+                                    DETERMINISTIC AST EVALUATION
                                   </span>
                                 </div>
                               </div>

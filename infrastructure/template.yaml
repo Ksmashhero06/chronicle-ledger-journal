@@ -4,6 +4,12 @@ Description: >
   Chronicle Ledger v2 - AWS Native Evidence-Grounded Requirement Verification
   & Submission Readiness Platform for AWS Builder Center Zero to Shipped 2026.
 
+Parameters:
+  BedrockModelId:
+    Type: String
+    Default: us.anthropic.claude-3-7-sonnet-20250219-v1:0
+    Description: Supported Amazon Bedrock Model ID for AI perception and evidence extraction
+
 Globals:
   Function:
     Timeout: 30
@@ -16,7 +22,7 @@ Globals:
         AWS_REGION: !Ref AWS::Region
         PROJECTS_TABLE: !Ref ProjectsTable
         EVIDENCE_BUCKET: !Ref EvidenceBucket
-        BEDROCK_MODEL_ID: anthropic.claude-3-5-sonnet-20241022-v2:0
+        BEDROCK_MODEL_ID: !Ref BedrockModelId
 
 Resources:
   # 1. HTTP API Gateway

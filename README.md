@@ -1,99 +1,235 @@
-# Chronicle Ledger
+# Chronicle Ledger v2
+### Evidence-Grounded Requirement Verification & Readiness Platform
 
-**Chronicle Ledger — Multi-Cloud Cognitive Intelligence & Deterministic Verification Platform**
+**Competition**: AWS Builder Center — Zero to Shipped 2026 Hackathon  
+**Category**: `#workplace-efficiency` | **Lane**: `#community`  
+**Submission**: A new, AWS-hosted web application that converts unstructured requirements into structured rules, extracts evidence from submitted artifacts, evaluates those rules deterministically, preserves evidence provenance, and computes an auditable readiness state for shipping or hackathon submissions.
 
-A unified software engineering intelligence platform combining private multi-turn Socratic reflection (Google Cloud & Gemini) with deterministic, hallucination-free compliance and competition verification (Amazon Web Services & Mathematical AST Evaluator).
+> **One-Line Pitch**: *Chronicle Ledger v2 turns requirements into executable rules and evidence into auditable proof—so users can see exactly what is verified, what is missing, and whether they are ready to ship or submit.*
 
 ---
 
-## Platform Evolution & Competition Submissions
+## 1. What We Are Actually Building
 
-Chronicle Ledger was engineered across two distinct, high-impact competition phases, evolving from a cloud-native developer journaling co-pilot into a multi-cloud enterprise verification and audit platform.
+Developers, hackathon teams, and engineering organizations face a universal problem: **requirements live in one place, evidence lives in another, and verifying whether everything is truly satisfied is manual, subjective, and difficult to audit.**
+
+Chronicle Ledger v2 solves this with an evidence-grounded verification engine that answers whether a project satisfies its requirements, and reveals the exact evidence behind every answer.
+
+### The Core Verification Flow:
 
 ```
-┌────────────────────────────────────────────────────────┐
-│                      CHRONICLE LEDGER                  │
-├───────────────────────────┬────────────────────────────┤
-│         VERSION 1         │         VERSION 2          │
-│   Google Cloud Edition    │     AWS Edition & AST      │
-├───────────────────────────┼────────────────────────────┤
-│ • Google AI Studio / APAC │ • AWS "Zero to Shipped"    │
-│   GenAI Competition       │   2026 Hackathon           │
-│ • Google Cloud Run        │ • AWS Lambda ARM64 (SAM)   │
-│ • Google Gemini 3.6 Flash │ • Amazon Bedrock (Claude)  │
-│ • Cloud Firestore         │ • Amazon DynamoDB          │
-│ • Firebase Authentication │ • Pure AST Evaluator       │
-│ • Socratic DevLog Mode    │ • SHA-256 Provenance Ledger│
-│ • #AccelerateAIwithCloudRun│ • Zero-Hallucination Proof │
-└───────────────────────────┴────────────────────────────┘
+Requirements
+     │
+     ▼
+AI Perception (Amazon Bedrock)
+     │
+     ▼
+Structured Variables + Rules (Pydantic Schema)
+     │
+     ▼
+Evidence Artifacts (Code, Git History, AWS Logs, Telemetry)
+     │
+     ▼
+Deterministic AST Evaluation (Sandboxed Python Engine)
+     │
+     ├──► PROVEN_TRUE
+     ├──► PROVEN_FALSE
+     └──► EVIDENCE_INSUFFICIENT
+     │
+     ▼
+Readiness Score Gauge (0–100%)
+     │
+     ▼
+Auditable Evidence Ledger (SHA-256 Hashes + Character Spans)
+     │
+     ▼
+Official Submission Dossier Generator
 ```
 
-### 1. Version 1: The Google Cloud & AI Studio Edition
-- **Target Competition**: **Google Cloud GenAI Hackathon / Google AI Studio APAC Program (`#AccelerateAIwithCloudRun`)**.
-- **What We Had Earlier**:
-  - **Socratic Journaling Assistant**: A conversational thinking partner built on Gemini 3.6 Flash API with multi-model fallback resiliency (`gemini-3.6-flash` → `gemini-3.1-flash-lite` → `gemini-flash-latest` → `gemini-3.7-flash`).
-  - **DevLog Technical Copywriting**: A specialized mode that transforms raw commit messages, terminal logs, and bug notes into LinkedIn updates tagged with `#AccelerateAIwithCloudRun` and `#BuildInPublic`.
-  - **User Isolation & Auth**: Federated Google Sign-In and guest demo capabilities via Firebase Authentication, with user-scoped isolation in Google Cloud Firestore (`/users/{userId}/interactions/{interactionId}`).
-  - **Production Deployment**: Containerized deployment running on Google Cloud Run at [https://chronicle-ledger.ai.studio](https://chronicle-ledger.ai.studio).
-  - **History & Pattern Analysis**: Full-history archive with Gemini-driven thematic arc detection, sentiment trajectory, and personalized proactive prompts.
+---
 
-### 2. Version 2: The AWS "Zero to Shipped" 2026 Upgrade
-- **Target Competition**: **AWS "Zero to Shipped" Hackathon (2026)**.
-- **What Has Been Upgraded**:
-  - **Deterministic AST Rule Verification Engine**: Completely replaces error-prone LLM grading with a pure mathematical Abstract Syntax Tree (AST) evaluator in a sandboxed Python runtime. Evaluates strict Boolean and relational rules (`AND`, `OR`, `NOT`, `==`, `>=`, etc.) with a mathematical **Zero Hallucinations Guarantee** (`PROVEN_TRUE`, `PROVEN_FALSE`, `EVIDENCE_INSUFFICIENT`).
-  - **Amazon Bedrock AI Perception Service**: Integrates **Anthropic Claude 3.5 Sonnet on Amazon Bedrock** to extract structured variables, numeric metrics, and claims from unstructured developer logs, git histories, and architecture specs.
-  - **Cryptographic SHA-256 Provenance Ledger**: Every piece of developer evidence, code snippet, and telemetry payload is fingerprinted with an immutable SHA-256 digest, exact character span locators (`start_char`, `end_char`), and timestamped audit logs.
-  - **Serverless AWS SAM Cloud Architecture**:
-    - **AWS Lambda (ARM64 Graviton)**: Running FastAPI via the Mangum adapter for sub-50ms execution.
-    - **Amazon API Gateway (HTTP API)**: Zero-config serverless routing and throttling.
-    - **Amazon DynamoDB**: On-demand single-digit millisecond state persistence for verified projects and audit logs.
-    - **AWS IAM**: Strict least-privilege policies for Bedrock model invocation.
-  - **Unified "Verification & Readiness" UI Suite**:
-    - Mode switcher upgraded to **6 operational modes** directly on the dashboard.
-    - Real-time **Readiness Score Gauge (0–100%)** broken down by category (Identity, Lineage, Telemetry, Deployment).
-    - **Rule Ingestion Modal (`requirement-modal.tsx`)**: Ingest custom hackathon or enterprise compliance requirements.
-    - **Evidence Modal (`evidence-modal.tsx`)**: Real-time evidence uploader with instant SHA-256 hash generation.
-    - **Official AWS Submission Dossier Generator (`dossier-modal.tsx`)**: Generates auditable Markdown dossiers containing cryptographic proofs and verbatim citations for hackathon judges.
-    - **Bedrock & Agent Telemetry HUD (`telemetry-modal.tsx`)**: Live visualization of agent tool calls, token usage, latency, and model inference metrics.
-  - **Complete Codebase Unification**: Dissolved the isolated `v2/` directory and refactored all backend, SAM infrastructure, and frontend verification modules directly into root-level architecture (`backend/`, `infrastructure/`, `components/`, `lib/`).
+## 2. What Makes It Technically Novel
+
+The critical engineering breakthrough of Chronicle Ledger v2 is the strict separation between **AI Perception** and **Deterministic Verification**.
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                        CHRONICLE LEDGER v2                             │
+├────────────────────────────────────┬───────────────────────────────────┤
+│        1. AI PERCEPTION            │    2. DETERMINISTIC VERIFICATION   │
+│       (Amazon Bedrock)             │          (Pure Python AST)        │
+├────────────────────────────────────┼───────────────────────────────────┤
+│ • Ingests messy, unstructured text │ • Executes strict mathematical    │
+│   (PDFs, markdown, PRs, logs)      │   and Boolean expressions         │
+│ • Extracts structured variables:   │ • Evaluates: AND, OR, NOT,        │
+│   "The model achieved 92.4%        │   ==, !=, <, <=, >, >=            │
+│    accuracy"                       │ • Evaluates: 92.4 >= 90.0         │
+│   ──► { metric: "accuracy",        │ • Returns: PROVEN_TRUE            │
+│         value: 92.4 }              │ • ZERO probabilistic grading risk │
+└────────────────────────────────────┴───────────────────────────────────┘
+```
+
+### Why This Division is Superior:
+Asking a Large Language Model *"Does this submission satisfy the requirement?"* is fundamentally flawed: it invites confirmation bias, non-deterministic reasoning, and ungrounded hallucinations.
+
+In Chronicle Ledger v2:
+1. **The LLM (Amazon Bedrock) is restricted to perception**: extracting candidate claims, numbers, and verbatim text citations.
+2. **The AST Engine performs deterministic verification**: evaluating Boolean and relational logic with mathematical certainty.
+
+### Three Discrete Deterministic States:
+- **`PROVEN_TRUE`**: Mathematical proof satisfied against cited evidence.
+- **`PROVEN_FALSE`**: Evidence contradicts the requirement constraint.
+- **`EVIDENCE_INSUFFICIENT`**: Missing citations or extraction confidence below threshold.
+
+> **Technical Formulation**: *Deterministic rule evaluation after AI-assisted evidence extraction.*
 
 ---
 
-### Comparison: Version 1 vs. Version 2
+## 3. Cryptographic Evidence Integrity: Traceable to Proof
 
-| Feature / Dimension | Version 1 (Google Cloud / APAC Program) | Version 2 (AWS "Zero to Shipped" 2026 Upgrade) |
+Rather than promising opaque "AI trust", Chronicle Ledger v2 implements verifiable **cryptographic evidence integrity**:
+
+- **SHA-256 Digest**: Every uploaded evidence file, git commit log, and deployment payload receives an immutable SHA-256 hash upon ingestion.
+- **Exact Character Spans**: Citations record exact character offsets (`start_char`, `end_char`) pinning the verbatim text that satisfied the rule.
+- **Timestamped Audit Ledger**: Every evaluation turn is recorded in an append-only ledger persisted to Amazon DynamoDB.
+
+> *“Every verification result is traceable to evidence.”*
+
+---
+
+## 4. The Real Judge Demo Experience
+
+A competition judge does not want to wade through conceptual abstraction—they want to see requirement verification in action:
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│ SCREEN 1 — LANDING & WORKSPACE                                          │
+│ "Turn requirements into verifiable evidence."                           │
+│ [Create Verification Project]  [Try Instant Demo]                       │
+└────────────────────────────────────┬────────────────────────────────────┘
+                                     │
+                                     ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│ SCREEN 2 — REQUIREMENT INGESTION                                        │
+│ Ingest: AWS_Zero_to_Shipped_Rules.pdf                                   │
+│ System Extracts:                                                        │
+│ • AWS-001 Originality (ORIGIN_FORK == false AND COMMITS_COUNT >= 5)     │
+│ • AWS-002 Agent Telemetry (AGENTS_USED >= 1 AND AUDIT_LOGS == true)      │
+│ • AWS-003 Live Public AWS Deployment (PUBLIC_URL == true AND AWS == true)│
+└────────────────────────────────────┬────────────────────────────────────┘
+                                     │
+                                     ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│ SCREEN 3 — EVIDENCE INGESTION                                           │
+│ Upload: Git commit logs, SAM deploy JSON, Agent session traces          │
+│ System Computes: SHA-256 digest: e3b0c44298fc1c149afbf4c8996fb92427...  │
+└────────────────────────────────────┬────────────────────────────────────┘
+                                     │
+                                     ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│ SCREEN 4 — DETERMINISTIC VERIFICATION                                   │
+│ R03 — Live AWS Deployment                                               │
+│ Rule: PUBLIC_URL_EXISTS == true AND AWS_HOSTED == true                  │
+│ Result: PROVEN_TRUE                                                     │
+│ Citation: Characters 118–341 | Source: sam-deploy-output.json           │
+└────────────────────────────────────┬────────────────────────────────────┘
+                                     │
+                                     ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│ SCREEN 5 — SUBMISSION READINESS GAUGE                                   │
+│ [=====================================>      ] 82% READINESS            │
+│ ✓ 14 Verified   ⚠ 2 Needs Review   ✕ 1 Missing                          │
+└────────────────────────────────────┬────────────────────────────────────┘
+                                     │
+                                     ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│ SCREEN 6 — OFFICIAL SUBMISSION DOSSIER                                  │
+│ One-click generation of the Markdown Dossier with evidence citations,   │
+│ SHA-256 hashes, timestamps, and readiness audit for competition judges. │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 5. The AI Coding Agent & AWS MCP Integration (The Meta-Story)
+
+A unique highlight of this submission for the **AWS Builder Center — Zero to Shipped 2026 Hackathon** is our dual relationship with AI coding agents:
+
+```
+Coding Agent (Antigravity)
+     │
+     ▼
+AWS MCP Server / AWS Agent Toolkit
+     │
+     ├──► AWS Documentation & Model Catalog
+     ├──► AWS SAM Infrastructure Generation
+     ├──► Lambda & Bedrock Runtime Configuration
+     ├──► Automated Pytest Test Execution
+     └──► Automated Deployment & Health Verification
+```
+
+> **The Meta-Story**: *The application verifies project requirements while the project itself was shipped using an AI coding agent connected to AWS via the AWS MCP Server and Agent Toolkit.*
+
+---
+
+## 6. Project Lineage & Originality
+
+- **Chronicle Ledger v2 is a newly built, original AWS application** engineered specifically for the AWS Builder Center Zero to Shipped 2026 Hackathon (`#workplace-efficiency`, `#community`).
+- **Relationship to Chronicle Ledger v1**:
+  - **Version 1 (Google Cloud / AI Studio Edition)** established our earlier research into auditable reflection logs and developer journaling.
+  - **Version 2 (AWS Edition)** is a standalone, purpose-built verification platform. The earlier v1 components are preserved in the repository history as conceptual lineage, but are **not runtime dependencies** for the core AWS verification engine.
+  - The AWS stack (Lambda, API Gateway, DynamoDB, Bedrock, and the AST Rule Engine) operates entirely independently.
+
+---
+
+## 7. AWS Cloud Native Architecture
+
+```
+                       CHRONICLE LEDGER v2
+                                │
+                        React / Next.js
+                                │
+                       Amazon API Gateway
+                                │
+                       Python Lambda (ARM64)
+                                │
+          ┌─────────────────────┼─────────────────────┐
+          ▼                     ▼                     ▼
+      Amazon S3          Amazon DynamoDB        Amazon Bedrock
+   (Evidence Store)       (Project DB)       (Claude Perception)
+                                                      │
+                                                      ▼
+                                             Structured Variables
+                                                      │
+                                                      ▼
+                                               AST Rule Engine
+                                                      │
+                                                      ▼
+                                             Verification Result
+                                                      │
+                                        ┌─────────────┴─────────────┐
+                                        ▼                           ▼
+                                 Readiness Gauge             Evidence Ledger
+                                        │                           │
+                                        └─────────────┬─────────────┘
+                                                      ▼
+                                              Dossier Generator
+```
+
+| Component | AWS Service / Technology | Purpose |
 | :--- | :--- | :--- |
-| **Primary Focus** | Personal Socratic reflection & automated DevLog copywriting | Deterministic hackathon verification, compliance gates & audit |
-| **Target Hackathon** | Google AI Studio APAC / Google Cloud GenAI | AWS "Zero to Shipped" Hackathon 2026 |
-| **Verification Logic** | Probabilistic LLM synthesis (Gemini 3.6 Flash) | **Pure AST Rule Engine** (Mathematical Zero Hallucinations) |
-| **AI Perception Engine** | Google Gemini 3.6 Flash / Flash-Lite Fallback Ladder | **Amazon Bedrock (Anthropic Claude 3.5 Sonnet)** |
-| **Evidence Auditing** | Firestore document logs | **SHA-256 Cryptographic Digest** & Character Span Locator |
-| **Compute Infrastructure** | Google Cloud Run (Containerized Next.js) | **AWS Lambda ARM64 (SAM)** + Google Cloud Run Dual-Engine |
-| **Database Layer** | Google Cloud Firestore (Document Store) | **Amazon DynamoDB** (KV / Document) + Cloud Firestore |
-| **Submission Output** | LinkedIn-optimized social posts (`#BuildInPublic`) | **Auditable Submission Dossier** + Judges Verification Pack |
-| **Telemetry & Observability** | Console metrics & basic client state | **Agent Telemetry HUD** (Token consumption, Bedrock latency) |
-| **Active Modes** | 5 Modes (Reflection, Brainstorm, Summary, Freeform, DevLog) | **6 Modes** (+ Verification & Readiness Suite) |
+| **Serverless Compute** | AWS Lambda (`ARM64` Graviton) | Executes FastAPI application via Mangum; serverless, event-driven AWS architecture designed for low operational overhead. |
+| **API Routing** | Amazon API Gateway (HTTP API) | High-performance, low-latency API entry point for verification and project endpoints. |
+| **AI Perception** | Amazon Bedrock (Configurable Claude Family) | Ingests unstructured requirements and artifacts to extract structured variables with citation spans. |
+| **State Persistence** | Amazon DynamoDB | On-demand single-digit millisecond storage for requirements, projects, and verification audit trails. |
+| **Evidence Storage** | Amazon S3 | Secure bucket storage for ingested challenge rules, codebases, and evidence artifacts. |
+| **Rule Verification** | Pure Python AST Engine | Mathematical and Boolean AST evaluation guaranteeing deterministic, auditable outcomes. |
+| **Integrity Ledger** | SHA-256 Provenance Service | Computes cryptographic evidence fingerprints and verbatim character span locators. |
+| **Frontend UI** | Next.js 15 (App Router) + React 19 | Responsive command center featuring the 6th mode: Verification & Readiness Suite. |
 
 ---
 
-## Architecture Overview
-
-Chronicle Ledger is a unified intelligence platform combining personal socratic reflection (Google Cloud & Gemini) with deterministic requirement verification (AWS Bedrock & Mathematical AST Evaluator).
-
-| Component | Technology | Purpose |
-| :--- | :--- | :--- |
-| **Frontend Application** | Next.js 15 (App Router) + React 19 | Responsive web command center supporting Socratic Reflection, DevLog, and Verification modes. |
-| **User Identity** | Firebase Authentication | Federated Google Sign-In with zero password storage and guest demo capability. |
-| **Backend Database** | Cloud Firestore / DynamoDB | User-isolated document persistence under `/users/{userId}/interactions/{interactionId}`. |
-| **AI Reflection Engine** | Gemini 3.6 Flash API | Socratic reflection guidance, creative brainstorming, and DevLog LinkedIn post synthesis. |
-| **Verification Engine** | Python 3.12+ / FastAPI / AST | Pure mathematical and Boolean AST rule evaluation with zero hallucinations for compliance gates. |
-| **Perception & Matching** | Amazon Bedrock (Claude 3.5 Sonnet) | Parses unstructured challenge requirements and matches evidence spans with telemetry tracking. |
-| **Provenance Tracking** | SHA-256 Cryptographic Ledger | Pins verbatim evidence quotes with immutable hashes for transparent competition auditing. |
-| **Infrastructure & Runtime** | AWS Lambda ARM64 / Google Cloud Run | Serverless, containerized deployment with sub-50ms execution latency. |
-
----
-
-## Core Features
+## 8. Core Features & Capabilities
 
 - **Federated Authentication & Passwordless Security**:
   - Outsources credential management to Google Sign-In via Firebase Auth.

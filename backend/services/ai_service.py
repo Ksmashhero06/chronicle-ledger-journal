@@ -22,6 +22,13 @@ from ..engine.rule_schema import (
 from .provenance_service import locate_verbatim_span
 
 
+# Configurable Amazon Bedrock model ID with modern supported default (can be overridden via BEDROCK_MODEL_ID env var)
+DEFAULT_BEDROCK_MODEL = os.environ.get(
+    "BEDROCK_MODEL_ID",
+    "us.anthropic.claude-3-7-sonnet-20250219-v1:0"
+)
+
+
 class AgentTelemetry:
     def __init__(self):
         self.invocations: List[Dict[str, Any]] = []
@@ -49,7 +56,7 @@ class AgentTelemetry:
             "total_invocations": total_calls,
             "avg_latency_ms": round(avg_latency, 2),
             "total_tokens_processed": total_tokens,
-            "active_model": last_call["model_id"] if last_call else "anthropic.claude-3-5-sonnet-20241022-v2:0",
+            "active_model": last_call["model_id"] if last_call else DEFAULT_BEDROCK_MODEL,
             "recent_traces": self.invocations[-10:],
         }
 
@@ -75,7 +82,7 @@ def extract_requirements_from_text(raw_text: str, project_id: str) -> List[Requi
     """
     start_time = time.time()
     bedrock = _get_bedrock_client()
-    model_id = os.environ.get("BEDROCK_MODEL_ID", "anthropic.claude-3-5-sonnet-20241022-v2:0")
+    model_id = os.environ.get("BEDROCK_MODEL_ID", DEFAULT_BEDROCK_MODEL)
 
     system_prompt = """You are Chronicle Ledger v2's AI Rule Extraction Engine.
 Analyze the provided requirement text and extract distinct requirements into a JSON array.
