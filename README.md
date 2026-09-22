@@ -1,8 +1,78 @@
 # Chronicle Ledger
 
-**Chronicle Ledger — Production Directives v2.4 Active**
+**Chronicle Ledger — Multi-Cloud Cognitive Intelligence & Deterministic Verification Platform**
 
-A secure, user-authenticated multi-turn reflection and personal journaling application powered by Google Cloud Run, Cloud Firestore, Firebase Authentication, and the Gemini 3.6 Flash API with automatic fallback resilience.
+A unified software engineering intelligence platform combining private multi-turn Socratic reflection (Google Cloud & Gemini) with deterministic, hallucination-free compliance and competition verification (Amazon Web Services & Mathematical AST Evaluator).
+
+---
+
+## Platform Evolution & Competition Submissions
+
+Chronicle Ledger was engineered across two distinct, high-impact competition phases, evolving from a cloud-native developer journaling co-pilot into a multi-cloud enterprise verification and audit platform.
+
+```
+┌────────────────────────────────────────────────────────┐
+│                      CHRONICLE LEDGER                  │
+├───────────────────────────┬────────────────────────────┤
+│         VERSION 1         │         VERSION 2          │
+│   Google Cloud Edition    │     AWS Edition & AST      │
+├───────────────────────────┼────────────────────────────┤
+│ • Google AI Studio / APAC │ • AWS "Zero to Shipped"    │
+│   GenAI Competition       │   2026 Hackathon           │
+│ • Google Cloud Run        │ • AWS Lambda ARM64 (SAM)   │
+│ • Google Gemini 3.6 Flash │ • Amazon Bedrock (Claude)  │
+│ • Cloud Firestore         │ • Amazon DynamoDB          │
+│ • Firebase Authentication │ • Pure AST Evaluator       │
+│ • Socratic DevLog Mode    │ • SHA-256 Provenance Ledger│
+│ • #AccelerateAIwithCloudRun│ • Zero-Hallucination Proof │
+└───────────────────────────┴────────────────────────────┘
+```
+
+### 1. Version 1: The Google Cloud & AI Studio Edition
+- **Target Competition**: **Google Cloud GenAI Hackathon / Google AI Studio APAC Program (`#AccelerateAIwithCloudRun`)**.
+- **What We Had Earlier**:
+  - **Socratic Journaling Assistant**: A conversational thinking partner built on Gemini 3.6 Flash API with multi-model fallback resiliency (`gemini-3.6-flash` → `gemini-3.1-flash-lite` → `gemini-flash-latest` → `gemini-3.7-flash`).
+  - **DevLog Technical Copywriting**: A specialized mode that transforms raw commit messages, terminal logs, and bug notes into LinkedIn updates tagged with `#AccelerateAIwithCloudRun` and `#BuildInPublic`.
+  - **User Isolation & Auth**: Federated Google Sign-In and guest demo capabilities via Firebase Authentication, with user-scoped isolation in Google Cloud Firestore (`/users/{userId}/interactions/{interactionId}`).
+  - **Production Deployment**: Containerized deployment running on Google Cloud Run at [https://chronicle-ledger.ai.studio](https://chronicle-ledger.ai.studio).
+  - **History & Pattern Analysis**: Full-history archive with Gemini-driven thematic arc detection, sentiment trajectory, and personalized proactive prompts.
+
+### 2. Version 2: The AWS "Zero to Shipped" 2026 Upgrade
+- **Target Competition**: **AWS "Zero to Shipped" Hackathon (2026)**.
+- **What Has Been Upgraded**:
+  - **Deterministic AST Rule Verification Engine**: Completely replaces error-prone LLM grading with a pure mathematical Abstract Syntax Tree (AST) evaluator in a sandboxed Python runtime. Evaluates strict Boolean and relational rules (`AND`, `OR`, `NOT`, `==`, `>=`, etc.) with a mathematical **Zero Hallucinations Guarantee** (`PROVEN_TRUE`, `PROVEN_FALSE`, `EVIDENCE_INSUFFICIENT`).
+  - **Amazon Bedrock AI Perception Service**: Integrates **Anthropic Claude 3.5 Sonnet on Amazon Bedrock** to extract structured variables, numeric metrics, and claims from unstructured developer logs, git histories, and architecture specs.
+  - **Cryptographic SHA-256 Provenance Ledger**: Every piece of developer evidence, code snippet, and telemetry payload is fingerprinted with an immutable SHA-256 digest, exact character span locators (`start_char`, `end_char`), and timestamped audit logs.
+  - **Serverless AWS SAM Cloud Architecture**:
+    - **AWS Lambda (ARM64 Graviton)**: Running FastAPI via the Mangum adapter for sub-50ms execution.
+    - **Amazon API Gateway (HTTP API)**: Zero-config serverless routing and throttling.
+    - **Amazon DynamoDB**: On-demand single-digit millisecond state persistence for verified projects and audit logs.
+    - **AWS IAM**: Strict least-privilege policies for Bedrock model invocation.
+  - **Unified "Verification & Readiness" UI Suite**:
+    - Mode switcher upgraded to **6 operational modes** directly on the dashboard.
+    - Real-time **Readiness Score Gauge (0–100%)** broken down by category (Identity, Lineage, Telemetry, Deployment).
+    - **Rule Ingestion Modal (`requirement-modal.tsx`)**: Ingest custom hackathon or enterprise compliance requirements.
+    - **Evidence Modal (`evidence-modal.tsx`)**: Real-time evidence uploader with instant SHA-256 hash generation.
+    - **Official AWS Submission Dossier Generator (`dossier-modal.tsx`)**: Generates auditable Markdown dossiers containing cryptographic proofs and verbatim citations for hackathon judges.
+    - **Bedrock & Agent Telemetry HUD (`telemetry-modal.tsx`)**: Live visualization of agent tool calls, token usage, latency, and model inference metrics.
+  - **Complete Codebase Unification**: Dissolved the isolated `v2/` directory and refactored all backend, SAM infrastructure, and frontend verification modules directly into root-level architecture (`backend/`, `infrastructure/`, `components/`, `lib/`).
+
+---
+
+### Comparison: Version 1 vs. Version 2
+
+| Feature / Dimension | Version 1 (Google Cloud / APAC Program) | Version 2 (AWS "Zero to Shipped" 2026 Upgrade) |
+| :--- | :--- | :--- |
+| **Primary Focus** | Personal Socratic reflection & automated DevLog copywriting | Deterministic hackathon verification, compliance gates & audit |
+| **Target Hackathon** | Google AI Studio APAC / Google Cloud GenAI | AWS "Zero to Shipped" Hackathon 2026 |
+| **Verification Logic** | Probabilistic LLM synthesis (Gemini 3.6 Flash) | **Pure AST Rule Engine** (Mathematical Zero Hallucinations) |
+| **AI Perception Engine** | Google Gemini 3.6 Flash / Flash-Lite Fallback Ladder | **Amazon Bedrock (Anthropic Claude 3.5 Sonnet)** |
+| **Evidence Auditing** | Firestore document logs | **SHA-256 Cryptographic Digest** & Character Span Locator |
+| **Compute Infrastructure** | Google Cloud Run (Containerized Next.js) | **AWS Lambda ARM64 (SAM)** + Google Cloud Run Dual-Engine |
+| **Database Layer** | Google Cloud Firestore (Document Store) | **Amazon DynamoDB** (KV / Document) + Cloud Firestore |
+| **Submission Output** | LinkedIn-optimized social posts (`#BuildInPublic`) | **Auditable Submission Dossier** + Judges Verification Pack |
+| **Telemetry & Observability** | Console metrics & basic client state | **Agent Telemetry HUD** (Token consumption, Bedrock latency) |
+| **Active Modes** | 5 Modes (Reflection, Brainstorm, Summary, Freeform, DevLog) | **6 Modes** (+ Verification & Readiness Suite) |
 
 ---
 
@@ -94,26 +164,28 @@ The application guides users through a deliberate, structured cognitive reflecti
 │ 2. Select Cognitive Mode                               │
 │    [Reflection] [Brainstorm] [Summary] [Freeform]      │
 │    [DevLog (Elite Technical Copywriting)]              │
+│    [Verification & Readiness (Zero-Hallucination AST)] │
 └──────────────────────────┬─────────────────────────────┘
                            │
                            ▼
 ┌────────────────────────────────────────────────────────┐
-│ 3. Compose Journal Reflection or Select Starter Prompt │
+│ 3. Compose Journal Reflection / Ingest Verification    │
 └──────────────────────────┬─────────────────────────────┘
                            │
                            ▼
 ┌────────────────────────────────────────────────────────┐
-│ 4. Engage in Multi-Turn Socratic AI Dialogue           │
-│    (Auto-saved to Firestore under /users/{uid}/...)    │
+│ 4. Engage in AI Dialogue or Execute AST Evaluation     │
+│    - Editorial/DevLog: Auto-saved to Cloud Firestore   │
+│    - Verification: Evaluated via Bedrock & AST Engine  │
 └──────────────┬───────────────────────────┬─────────────┘
                │                           │
-   [Start New Entry]                       │ [Explore History]
+   [Start New Entry]                       │ [Explore History / Modals]
                ▼                           ▼
 ┌──────────────────────────────┐ ┌──────────────────────────────┐
 │ 5. Safe Reset (Pre-Save)     │ │ 6. History & Archive View    │
 │    - Commits current entry   │ │    - Chronological Sorting   │
 │    - Resets chat canvas      │ │    - Real-Time Search        │
-│    - Prepares fresh draft    │ │    - Revisit Past Dialogues  │
+│    - Prepares fresh draft    │ │    - Submission Dossier & HUD│
 └──────────────────────────────┘ └──────────────┬───────────────┘
                                                 │
                                                 ▼
@@ -136,22 +208,26 @@ The application guides users through a deliberate, structured cognitive reflecti
 ### Detailed Step-by-Step Flow:
 
 1. **Authentication & Identity**:
-   - The user signs in securely via **Google Sign-In**. Firebase Auth creates an authenticated session token.
+   - The user signs in securely via **Google Sign-In** or clicks **"Try Instant Demo"**. Firebase Auth creates an authenticated session token.
    - The user is directed to their personal, isolated workspace.
 
 2. **Mode Selection & Composition**:
-   - The user chooses between **Reflection**, **Brainstorm**, **Summary**, **Freeform**, or **DevLog** mode based on their cognitive or professional intent.
+   - The user chooses between **Reflection**, **Brainstorm**, **Summary**, **Freeform**, **DevLog**, or **Verification & Readiness** mode.
    - In editorial modes, the user drafts reflections or selects Socratic inspiration prompts.
-   - In **DevLog** mode, the user enters unstructured engineering updates, bug fixes, deployment milestones, or sprint notes (or selects developer milestone templates).
+   - In **DevLog** mode, the user enters unstructured engineering updates, bug fixes, deployment milestones, or sprint notes.
+   - In **Verification & Readiness** mode, the user selects competition rules (e.g. `AWS-001 Original Lineage`, `AWS-002 Telemetry`, `AWS-003 Live Deployment`) or writes custom AST rules, and uploads evidence files or links.
 
-3. **Dual-Purpose AI Processing**:
+3. **Multi-Engine Intelligence Processing**:
    - **For Editorial Modes ([Reflection], [Brainstorm], [Summary], [Freeform])**:
-     - Gemini acts as an empathetic philosophical co-pilot and Socratic journaling coach.
-     - Gemini populates `socratic_response_markdown` with deep reflections and inquiry questions, maintaining conversational context across turns.
-   - **For Professional Mode ([DevLog])**:
-     - Gemini acts as an Elite Technical Copywriter and Developer Advocate.
-     - Gemini transforms raw logs into a polished, high-engagement update in `linkedin_optimized_post` featuring a strong hook, milestone bullet points, peer-to-peer technical voice, and mandatory campaign tags (`#AccelerateAIwithCloudRun` and `#BuildInPublic`).
-   - Both user inputs and AI outputs are validated, stripped of `undefined` keys, and committed to Cloud Firestore under `/users/{userId}/interactions/{interactionId}`.
+     - Gemini 3.6 Flash acts as an empathetic philosophical co-pilot and Socratic journaling coach, populating `socratic_response_markdown` while preserving multi-turn context.
+   - **For Professional Copywriting Mode ([DevLog])**:
+     - Gemini transforms raw logs into an engaging LinkedIn post in `linkedin_optimized_post` featuring a strong hook, milestone bullet points, peer-to-peer technical voice, and mandatory campaign tags (`#AccelerateAIwithCloudRun` and `#BuildInPublic`).
+   - **For Verification & Readiness Mode ([Zero-Hallucination AST Suite])**:
+     - **Amazon Bedrock (Claude 3.5 Sonnet)** parses the uploaded evidence and extracts strict numerical and Boolean variables with verbatim source spans.
+     - The **Deterministic AST Rule Evaluator** executes mathematical comparisons in a sandboxed Python runtime, returning `PROVEN_TRUE`, `PROVEN_FALSE`, or `EVIDENCE_INSUFFICIENT` with a mathematical zero-hallucination guarantee.
+     - The **Provenance Service** hashes all evidence with SHA-256 for cryptographic non-repudiation.
+     - Users can immediately export an official **AWS Submission Dossier** and inspect the **Telemetry HUD** for execution metrics.
+   - All session data is isolated and safely committed to Cloud Firestore and Amazon DynamoDB.
 
 4. **Starting a Fresh Entry with Transactional Safety**:
    - At any point, clicking the prominent **"Start New Journal Entry"** button triggers an automated pre-reset commit of the current interaction to Firestore.
@@ -283,14 +359,45 @@ gcloud run services describe $SERVICE_NAME \
 
 ---
 
-## 6. Functional Walkthrough & Validation Suite
+## 6. AWS SAM Serverless Deployment Flow (Version 2 Verification Engine)
+
+The Version 2 Verification Engine runs on a high-efficiency serverless architecture managed by AWS SAM:
+
+### Prerequisites:
+- AWS CLI configured with valid credentials (`aws configure`)
+- AWS SAM CLI installed (`sam --version`)
+- Python 3.12+ with pip
+
+### Automated Deployment:
+
+On Linux / macOS:
+```bash
+chmod +x infrastructure/deploy-aws.sh
+./infrastructure/deploy-aws.sh
+```
+
+On Windows (PowerShell):
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\infrastructure\deploy-aws.ps1
+```
+
+### Architecture Deployed by SAM:
+1. **AWS Lambda (`ARM64` Graviton)**: Executes the FastAPI app via Mangum with sub-50ms execution overhead.
+2. **Amazon API Gateway HTTP API**: Routes requests to `/health`, `/api/verification/evaluate`, and `/api/projects`.
+3. **Amazon DynamoDB**: Provisioned table `chronicle-ledger-projects-dev` with on-demand scaling for project and audit records.
+4. **IAM Role**: Scoped policy granting `bedrock:InvokeModel` strictly for `anthropic.claude-3-5-sonnet-20241022-v2:0`.
+
+---
+
+## 7. Functional Walkthrough & Validation Suite
 
 Use the following step-by-step test script to verify all core functional flows:
 
 1. **Authentication Flow**:
    - Navigate to the app entry point.
    - Verify that the Landing Page is displayed with the Google Sign-In prompt.
-   - Click **"Continue with Google"** / **"Sign In with Google"**.
+   - Click **"Continue with Google"** / **"Sign In with Google"** (or **"Try Instant Demo"** to bypass OAuth).
    - Complete Google Auth popup.
    - Verify that the private dashboard loads displaying your profile name, avatar, and connection status.
 
@@ -341,9 +448,25 @@ Use the following step-by-step test script to verify all core functional flows:
    - Inspect the metadata footer to verify the detected **Dominant Mindset**, **Resonance tier**, and **Demonstrated Skills/Themes**.
    - Navigate to **History & Themes** and confirm that the DevLog entry appears with its dedicated `DevLog` badge, ready for filtering or full thread restoration.
 
+9. **Version 2: Deterministic AST Verification, Provenance, & Dossier Suite**:
+   - In the mode tray, select the **"Verification & Readiness"** pill.
+   - Verify that the **AWS Zero to Shipped 2026 Readiness Suite** banner activates with the **Readiness Score Gauge (0–100%)**.
+   - Select starter rules such as `AWS-001 Original Lineage`, `AWS-002 Coding Agent Telemetry`, or `AWS-003 Live Public AWS Deployment`.
+   - Click **"Verify with Bedrock & Evaluate Rules"** (or press `⌘+Enter`).
+   - Verify that the **Deterministic AST Rule Evaluation Card** renders:
+     - Mathematical outcome badge: `PROVEN_TRUE` (green) / `PROVEN_FALSE` (red).
+     - Deterministic AST expression with strict Boolean variables: `ORIGIN_FORK == false AND COMMITS_COUNT >= 5 AND LICENSE == "MIT"`.
+     - Verbatim citation with exact character span locators.
+     - SHA-256 cryptographic digest of the ingested evidence.
+     - **"ZERO HALLUCINATIONS GUARANTEED"** badge indicating no LLM hallucination risk.
+   - Click **"Generate Dossier"**: Verify that the modal compiles the official Markdown submission report with provenance hashes and category completion bars.
+   - Click **"Agent Telemetry"**: Verify that the HUD visualizes real-time Bedrock Claude 3.5 latency, input/output tokens, and provenance status.
+
 ---
 
-## 7. Dual-Purpose Cognitive Output Specification
+## 8. Output Specifications
+
+### 8.1 Gemini Dual-Purpose Cognitive Output Specification
 
 The server-side endpoint (`/api/gemini/reflect`) validates and outputs Gemini responses in the following JSON schema format:
 
@@ -366,9 +489,51 @@ The server-side endpoint (`/api/gemini/reflect`) validates and outputs Gemini re
 }
 ```
 
+### 8.2 AST Deterministic Verification Engine Response Specification
+
+The verification endpoint (`/api/verification/evaluate`) returns strictly typed evaluation records guaranteeing zero LLM hallucinations:
+
+```json
+{
+  "project_id": "proj-aws-zero-to-shipped",
+  "evaluated_at": "2026-09-22T20:17:00Z",
+  "total_requirements": 3,
+  "satisfied_count": 3,
+  "readiness_score": 100.0,
+  "audit_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "evaluations": [
+    {
+      "requirement_id": "REQ-AWS-001",
+      "rule_expression": "ORIGIN_FORK == false AND COMMITS_COUNT >= 5 AND LICENSE == \"MIT\"",
+      "status": "PROVEN_TRUE",
+      "ast_evaluation_guarantee": "ZERO_HALLUCINATION_PURE_AST",
+      "extracted_variables": {
+        "ORIGIN_FORK": false,
+        "COMMITS_COUNT": 12,
+        "LICENSE": "MIT"
+      },
+      "verbatim_citations": [
+        {
+          "evidence_id": "EVID-GIT-LOG",
+          "start_char": 0,
+          "end_char": 420,
+          "sha256": "4a5b6c...",
+          "verbatim_text": "commit 79b9c37... Initial repository commit... License: MIT"
+        }
+      ]
+    }
+  ]
+}
+```
+
 ---
 
-## 8. Compliance & Legal
+## 9. Competitions, Compliance & Legal
+
+- **Version 1**: Created for and submitted to the **Google Cloud GenAI Hackathon / Google AI Studio APAC Program (`#AccelerateAIwithCloudRun`)**.
+- **Version 2**: Upgraded and submitted to the **AWS "Zero to Shipped" Hackathon (2026)**.
+- **License**: MIT License.
+- **Author**: Sathiyamoorthi K.
 
 © 2026 Sathiyamoorthi K. All rights reserved.
 

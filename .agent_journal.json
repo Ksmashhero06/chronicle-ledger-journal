@@ -1,5 +1,5 @@
 {
-  "current_objective": "Relocate all Chronicle Ledger v2 code from isolated v2/ directory to intended root files",
+  "current_objective": "Verify if Version 2 deployed on https://chronicle-ledger.ai.studio is working as expected",
   "steps_completed": [
     {
       "step_number": 1,
@@ -27,23 +27,14 @@
       "finding": "Dissolved v2/ directory, removed v2 from tsconfig exclude, and updated README architecture overview."
     },
     {
-      "step_number": 6,
-      "action": "Validated unified production build and test suites",
-      "finding": "Next.js production build succeeded in 2.7s with zero errors; all 9 pytest backend tests passed with 100% success."
+      "step_number": 8,
+      "action": "Updated README.md with Version 1 vs Version 2 breakdown and competition submissions",
+      "finding": "Documented Version 1 (Google Cloud / AI Studio APAC GenAI Hackathon) vs Version 2 (AWS Zero to Shipped 2026 Hackathon), evolution matrix, AST rule evaluation, Bedrock perception, SAM serverless infrastructure, and dual-output schemas."
     }
   ],
   "active_files": [
-    "backend/",
-    "infrastructure/",
-    "components/journal-dashboard.tsx",
-    "components/requirement-modal.tsx",
-    "components/evidence-modal.tsx",
-    "components/dossier-modal.tsx",
-    "components/telemetry-modal.tsx",
-    "lib/verification-types.ts",
-    "lib/verification-api.ts",
-    ".agent_code_map.md",
+    "README.md",
     ".agent_journal.json"
   ],
-  "next_step": "Stage, commit, and push the unified codebase to GitHub."
+  "next_step": "Stage, commit, and push updated README.md to GitHub."
 }
