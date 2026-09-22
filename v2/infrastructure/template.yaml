@@ -1,0 +1,108 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Chronicle Ledger v2 - AWS Native Evidence-Grounded Requirement Verification
+  & Submission Readiness Platform for AWS Builder Center Zero to Shipped 2026.
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 512
+    Runtime: python3.12
+    Architectures:
+      - arm64
+    Environment:
+      Variables:
+        AWS_REGION: !Ref AWS::Region
+        PROJECTS_TABLE: !Ref ProjectsTable
+        EVIDENCE_BUCKET: !Ref EvidenceBucket
+        BEDROCK_MODEL_ID: anthropic.claude-3-5-sonnet-20241022-v2:0
+
+Resources:
+  # 1. HTTP API Gateway
+  ChronicleHttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowMethods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - OPTIONS
+        AllowHeaders:
+          - Content-Type
+          - Authorization
+        AllowOrigins:
+          - '*'
+
+  # 2. Serverless Lambda Backend Function
+  ChronicleLedgerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../backend/
+      Handler: main.handler
+      Description: Core Deterministic Verification & Bedrock Perception Engine
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ProjectsTable
+        - S3CrudPolicy:
+            BucketName: !Ref EvidenceBucket
+        - Statement:
+            - Effect: Allow
+              Action:
+                - bedrock:InvokeModel
+                - bedrock:InvokeModelWithResponseStream
+              Resource: '*'
+      Events:
+        ApiEvent:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref ChronicleHttpApi
+            Path: /{proxy+}
+            Method: ANY
+
+  # 3. Amazon DynamoDB Table (Projects & Verification Ledger)
+  ProjectsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ChronicleLedger_Projects
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: project_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: project_id
+          KeyType: HASH
+      SSESpecification:
+        SSEEnabled: true
+
+  # 4. Amazon S3 Bucket (Evidence Artifacts & Requirements Storage)
+  EvidenceBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'chronicle-ledger-evidence-${AWS::AccountId}-${AWS::Region}'
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+Outputs:
+  HttpApiUrl:
+    Description: Live Public API Gateway Endpoint URL
+    Value: !Sub 'https://${ChronicleHttpApi}.execute-api.${AWS::Region}.amazonaws.com'
+    Export:
+      Name: ChronicleLedgerApiUrl
+
+  FunctionArn:
+    Description: Chronicle Ledger Lambda Function ARN
+    Value: !GetAtt ChronicleLedgerFunction.Arn
+
+  EvidenceBucketName:
+    Description: Amazon S3 Evidence Bucket
+    Value: !Ref EvidenceBucket
