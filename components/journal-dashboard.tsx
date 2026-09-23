@@ -73,7 +73,7 @@ const DEVLOG_STARTERS = [
 ];
 
 const VERIFICATION_STARTERS = [
-  'Verify all competition requirements against our active AWS evidence files...',
+  'Check all competition requirements against our active project materials...',
   'Check if requirement AWS-001 (Original Application) is satisfied by git commit history...',
   'Evaluate requirement AWS-002 (Coding Agent Connected to AWS) against CloudWatch telemetry...',
   'Test requirement AWS-003 (Live Public AWS Deployment) against HTTPS health check ping...',
@@ -653,10 +653,10 @@ export function JournalDashboard() {
           ...optimisticEntry,
           title: currentEntry.title === 'Untitled Chronicle' ? `Verification: ${verificationData.req_id}` : currentEntry.title,
           turns: finalTurns,
-          summary: 'Deterministic compliance verification passed against AWS Zero to Shipped 2026 guidelines.',
+          summary: 'Deterministic verification completed against project guidelines.',
           keyTakeaways: [
             'All conditions in AST expression evaluated deterministically to TRUE.',
-            'Evidence spans pinned with SHA-256 hashes for competition audit transparency.',
+            'Source materials hashed with SHA-256 for integrity and evaluation traceability.',
           ],
           updatedAt: getNow(),
         };
@@ -1357,11 +1357,11 @@ export function JournalDashboard() {
 
                         {/* Progression Stepper */}
                         <div className="flex items-center gap-1.5 text-[10px] font-mono bg-[#FAFAFA] p-2 rounded-xl border border-[#EEEEEE] text-[#666666]">
-                          <span className="font-semibold text-[#111111]">1. Rules</span>
+                          <span className="font-semibold text-[#111111]">1. Requirements</span>
                           <span className="text-[#CCCCCC]">→</span>
-                          <span className="font-semibold text-[#111111]">2. Evidence</span>
+                          <span className="font-semibold text-[#111111]">2. Supporting Material</span>
                           <span className="text-[#CCCCCC]">→</span>
-                          <span className="font-semibold text-[#111111]">3. Verify</span>
+                          <span className="font-semibold text-[#111111]">3. Check</span>
                           <span className="text-[#CCCCCC]">→</span>
                           <span className="font-bold text-emerald-600">4. Readiness</span>
                         </div>
@@ -1382,7 +1382,7 @@ export function JournalDashboard() {
                             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#DDDDDD] bg-white hover:bg-[#F5F5F5] text-xs text-[#111111] font-medium transition-colors cursor-pointer shadow-2xs"
                           >
                             <Upload className="w-3.5 h-3.5 text-[#666666]" />
-                            <span>+ Add Evidence</span>
+                            <span>+ Add Supporting Material</span>
                           </button>
                           <button
                             onClick={handleRunVerification}
@@ -1390,7 +1390,7 @@ export function JournalDashboard() {
                             className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#111111] hover:bg-black text-white text-xs font-semibold transition-colors cursor-pointer shadow-2xs"
                           >
                             <RotateCw className={`w-3.5 h-3.5 ${isVerifying ? 'animate-spin' : ''}`} />
-                            <span>{isVerifying ? 'Checking Evidence...' : 'Run Verification'}</span>
+                            <span>{isVerifying ? 'Checking Material...' : 'Run Checks'}</span>
                           </button>
                           <button
                             onClick={() => setShowRuleLabModal(true)}
@@ -1411,7 +1411,7 @@ export function JournalDashboard() {
                               } catch {
                                 setDossierData({
                                   dossier_id: 'dos_aws_readiness_verified',
-                                  markdown_content: `# Chronicle Ledger v2 — Verification Report\n\n- Project: Chronicle Ledger v2\n- Status: Verified\n- Architecture: AWS Lambda ARM64 + Bedrock Claude + Deterministic AST Evaluator\n- Evidence Integrity: SHA-256 Hashed\n- Evaluation: Rule-based without model verdict bias`,
+                                  markdown_content: `# Chronicle Ledger v2 — Verification Report\n\n- Project: Chronicle Ledger v2\n- Status: Satisfied\n- Architecture: AWS Lambda ARM64 + Bedrock Claude + Deterministic AST Evaluator\n- Material Integrity: SHA-256 Hashed\n- Evaluation: Rule-based without model verdict bias`,
                                 });
                               }
                               setShowDossierModal(true);
@@ -1446,13 +1446,13 @@ export function JournalDashboard() {
                       </div>
                     </div>
 
-                    {/* Stale Warning Banner (if evidence changed) */}
+                    {/* Stale Warning Banner (if material changed) */}
                     {staleCount > 0 && (
                       <div className="p-3.5 px-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                         <div className="flex items-center gap-2">
                           <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
                           <div>
-                            <span className="font-semibold block">Evidence updated: {staleCount} previous verification(s) need re-checking.</span>
+                            <span className="font-semibold block">Material updated: {staleCount} previous check(s) need re-evaluating.</span>
                             <p className="text-[11px] text-amber-700">A newly attached document may change your previous results.</p>
                           </div>
                         </div>
@@ -1462,24 +1462,24 @@ export function JournalDashboard() {
                           className="px-3 py-1.5 rounded-lg bg-amber-900 text-white font-medium hover:bg-amber-950 transition-colors text-xs flex items-center gap-1.5 shrink-0 cursor-pointer shadow-xs"
                         >
                           <RotateCw className={`w-3.5 h-3.5 ${isVerifying ? 'animate-spin' : ''}`} />
-                          <span>Re-run Verification</span>
+                          <span>Re-check Material</span>
                         </button>
                       </div>
                     )}
 
-                    {/* Empty Evidence Guidance Banner */}
+                    {/* Empty Material Guidance Banner */}
                     {reqs.length > 0 && (!project?.evidence_files || project.evidence_files.length === 0) && (
                       <div className="p-4 rounded-xl bg-blue-50/70 border border-blue-200 text-blue-900 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                         <div>
-                          <span className="font-semibold block">Requirements are ready to verify.</span>
-                          <p className="text-[11px] text-blue-700">Attach a test report, README, deployment log, or code file to verify your project.</p>
+                          <span className="font-semibold block">Requirements are ready to check.</span>
+                          <p className="text-[11px] text-blue-700">Attach a test report, README, deployment log, or notes to check your project.</p>
                         </div>
                         <button
                           onClick={() => setShowEviModal(true)}
                           className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs flex items-center gap-1.5 shrink-0 cursor-pointer shadow-xs"
                         >
                           <Upload className="w-3.5 h-3.5" />
-                          <span>+ Attach Evidence</span>
+                          <span>+ Add Supporting Material</span>
                         </button>
                       </div>
                     )}
@@ -1502,14 +1502,14 @@ export function JournalDashboard() {
                             </span>
                           </div>
                           <p className="text-xs text-[#666666]">
-                            {verifiedCount} verified, {reviewCount} need review, and {missingCount > 0 ? missingCount : 0} missing evidence out of {reqs.length} total requirements.
+                            {verifiedCount} satisfied, {reviewCount} need review, and {missingCount > 0 ? missingCount : 0} missing material out of {reqs.length} total requirements.
                           </p>
                         </div>
 
                         <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                           <div className="px-3 py-2 rounded-xl bg-[#FAFAFA] border border-[#EEEEEE] text-center min-w-[70px]">
                             <span className="text-sm font-bold text-emerald-600 block">{verifiedCount}</span>
-                            <span className="text-[10px] text-[#888888] font-mono uppercase">Verified</span>
+                            <span className="text-[10px] text-[#888888] font-mono uppercase">Satisfied</span>
                           </div>
                           <div className="px-3 py-2 rounded-xl bg-[#FAFAFA] border border-[#EEEEEE] text-center min-w-[70px]">
                             <span className="text-sm font-bold text-amber-600 block">{reviewCount}</span>
@@ -1553,20 +1553,20 @@ export function JournalDashboard() {
                             </div>
                           </div>
                           <p className="text-[10px] text-[#777777] font-sans pt-1">
-                            Verified = 100% credit • Needs Review = 25% partial credit • Missing = 0% credit.
+                            Satisfied = 100% credit • Needs Review = 25% partial credit • Missing = 0% credit.
                           </p>
                         </div>
                       )}
                     </div>
 
-                    {/* Requirements & Evidence Checks */}
+                    {/* Requirements & Material Checks */}
                     <div className="space-y-3">
                       <div className="flex items-center justify-between px-1">
                         <span className="text-xs font-bold font-mono uppercase tracking-wider text-[#888888]">
                           Requirements ({reqs.length})
                         </span>
                         <span className="text-xs text-[#666666]">
-                          Review current results and inspect supporting evidence
+                          Review current results and inspect supporting material
                         </span>
                       </div>
 
@@ -1603,16 +1603,16 @@ export function JournalDashboard() {
                           const evidenceFile = verif?.provenance?.evidence_file || trail?.source_file;
                           const verbatimSnippet = verif?.provenance?.verbatim_snippet || trail?.verbatim_snippet;
 
-                          // Human-first result explanation
+                          // Clear, objective result explanation
                           let resultExplanation = '';
                           if (isVerified) {
-                            resultExplanation = verif?.deterministic_evaluation?.explanation || trail?.why || 'Requirement verified against evidence.';
+                            resultExplanation = verif?.deterministic_evaluation?.explanation || trail?.why || 'This requirement was satisfied based on the supplied material.';
                           } else if (isReview) {
-                            resultExplanation = 'Needs Review: The AI extracted this value with lower confidence. Please check the quoted text.';
+                            resultExplanation = 'Needs review: The system detected relevant information but flagged lower extraction confidence. Please check the source snippet.';
                           } else if (isStale) {
-                            resultExplanation = 'Out of date: A new evidence file was uploaded since this requirement was checked.';
+                            resultExplanation = 'Material changed: A supporting file was updated since this check was performed.';
                           } else {
-                            resultExplanation = 'Missing evidence: No uploaded document or log matches this requirement yet.';
+                            resultExplanation = 'Missing material: No uploaded document, code, or log matches this requirement yet.';
                           }
 
                           return (
@@ -1658,7 +1658,7 @@ export function JournalDashboard() {
                                     {isStale && (
                                       <span className="px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-medium flex items-center gap-1.5">
                                         <AlertTriangle className="w-3.5 h-3.5 text-amber-700" />
-                                        Evidence Changed
+                                        Material Changed
                                       </span>
                                     )}
                                     <span className={`px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1.5 ${
@@ -1671,7 +1671,7 @@ export function JournalDashboard() {
                                       {isVerified && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />}
                                       {isReview && <AlertCircle className="w-3.5 h-3.5 text-amber-600" />}
                                       {isMissing && <span className="w-2 h-2 rounded-full bg-gray-400" />}
-                                      {isVerified ? 'Verified' : isReview ? 'Needs Review' : 'Missing Evidence'}
+                                      {isVerified ? 'Satisfied' : isReview ? 'Needs Review' : 'Missing Material'}
                                     </span>
                                   </div>
                                 </div>
@@ -1698,11 +1698,11 @@ export function JournalDashboard() {
                                   </p>
                                 </div>
 
-                                {/* 3. Supporting Evidence (if available) */}
+                                {/* 3. Supporting Material (if available) */}
                                 {evidenceFile && (
                                   <div className="space-y-1.5 text-xs">
                                     <div className="flex items-center gap-1.5 text-[#666666]">
-                                      <span className="text-[11px] font-semibold text-[#888888] uppercase">Evidence:</span>
+                                      <span className="text-[11px] font-semibold text-[#888888] uppercase">Source Material:</span>
                                       <span className="font-mono bg-[#F5F5F5] px-2 py-0.5 rounded text-[#111111]">
                                         {evidenceFile}
                                       </span>
@@ -1725,7 +1725,7 @@ export function JournalDashboard() {
                                         className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#111111] hover:bg-black text-white text-xs font-semibold cursor-pointer shadow-2xs"
                                       >
                                         <Upload className="w-3.5 h-3.5" />
-                                        <span>+ Add Evidence</span>
+                                        <span>+ Add Material</span>
                                       </button>
                                     )}
                                     {isStale && (
@@ -1735,7 +1735,7 @@ export function JournalDashboard() {
                                         className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-900 hover:bg-amber-950 text-white text-xs font-semibold cursor-pointer shadow-2xs"
                                       >
                                         <RotateCw className="w-3.5 h-3.5" />
-                                        <span>Re-verify Now</span>
+                                        <span>Re-check Now</span>
                                       </button>
                                     )}
                                     {isReview && (
@@ -1752,7 +1752,7 @@ export function JournalDashboard() {
                                         onClick={() => setShowEviModal(true)}
                                         className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-[#DDDDDD] bg-white hover:bg-[#F5F5F5] text-xs font-medium text-[#111111] cursor-pointer"
                                       >
-                                        <span>View Evidence Files</span>
+                                        <span>View Source Material</span>
                                       </button>
                                     )}
                                   </div>
@@ -1761,7 +1761,7 @@ export function JournalDashboard() {
                                   <button
                                     onClick={() => setExpandedTrailReqId(isExpanded ? null : req.req_id)}
                                     className="text-xs font-medium text-[#666666] hover:text-[#111111] flex items-center gap-1 cursor-pointer self-start sm:self-auto"
-                                    title="View underlying rule expression and verification details"
+                                    title="View underlying rule expression and processing details"
                                   >
                                     <span>{isExpanded ? 'Hide Details' : 'How was this checked?'}</span>
                                     {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -1773,26 +1773,26 @@ export function JournalDashboard() {
                                   <div className="mt-3 p-4 rounded-xl bg-[#FAFAFA] border border-[#EEEEEE] space-y-3 animate-in fade-in duration-150">
                                     <div className="flex items-center justify-between border-b border-[#EAEAEA] pb-2">
                                       <span className="text-[10px] uppercase font-mono tracking-wider font-bold text-[#111111]">
-                                        Technical Verification Details
+                                        Processing Details
                                       </span>
                                       <span className="text-[10px] font-mono text-emerald-700 font-semibold">
-                                        Deterministic AST Check
+                                        Deterministic Rule Check
                                       </span>
                                     </div>
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
                                       <div className="p-3 bg-white rounded-lg border border-[#E5E5E5] space-y-1">
-                                        <span className="text-[10px] font-mono uppercase text-[#888888] block">Evaluated Rule</span>
+                                        <span className="text-[10px] font-mono uppercase text-[#888888] block">Rule Checked</span>
                                         <code className="text-xs font-mono font-bold text-[#111111] block">
                                           {trail?.rule || req.expression || req.title}
                                         </code>
                                         <p className="text-[10px] text-[#666666]">
-                                          Parsed without eval() using recursive descent AST grammar.
+                                          Evaluated without eval() using recursive descent AST grammar.
                                         </p>
                                       </div>
 
                                       <div className="p-3 bg-white rounded-lg border border-[#E5E5E5] space-y-1">
-                                        <span className="text-[10px] font-mono uppercase text-[#888888] block">Extracted Fact Value</span>
+                                        <span className="text-[10px] font-mono uppercase text-[#888888] block">Detected Information</span>
                                         <p className="font-mono text-xs font-semibold text-[#111111]">
                                           {JSON.stringify(verif?.provenance?.extracted_value || trail?.extracted_value || 'None')}
                                         </p>
@@ -1804,16 +1804,16 @@ export function JournalDashboard() {
 
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                                       <div className="p-3 bg-white rounded-lg border border-[#E5E5E5] space-y-1">
-                                        <span className="text-[10px] font-mono uppercase text-[#888888] block">Evidence Integrity Hash</span>
+                                        <span className="text-[10px] font-mono uppercase text-[#888888] block">Source Material SHA-256</span>
                                         <p className="text-[11px] font-mono text-[#555555] truncate">
                                           {verif?.provenance?.evidence_sha256 || trail?.sha256 || 'SHA-256 pending'}
                                         </p>
                                       </div>
 
                                       <div className="p-3 bg-white rounded-lg border border-[#E5E5E5] space-y-1">
-                                        <span className="text-[10px] font-mono uppercase text-[#888888] block">Audit ID</span>
+                                        <span className="text-[10px] font-mono uppercase text-[#888888] block">Evaluation ID</span>
                                         <p className="text-[11px] font-mono text-[#555555] truncate">
-                                          {verif?.audit_hash || 'Pending verification run'}
+                                          {verif?.audit_hash || 'Pending evaluation run'}
                                         </p>
                                       </div>
                                     </div>
@@ -2230,7 +2230,7 @@ export function JournalDashboard() {
             } catch (err: any) {
               setActiveError({
                 kind: 'FILE_CORRUPT',
-                details: err.message || 'Evidence ingestion or hashing failed.',
+                details: err.message || 'Material processing failed.',
                 refId: 'CL-UPERR',
               });
             }

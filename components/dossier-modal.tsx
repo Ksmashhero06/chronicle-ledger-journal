@@ -49,7 +49,7 @@ export const DossierModal: React.FC<DossierModalProps> = ({
                 Verification Report
               </h3>
               <p className="text-[11px] text-[#888888]">
-                Exportable summary of requirements, evidence hashes, and evaluation results
+                Exportable summary of requirements, supporting materials, and check results
               </p>
             </div>
           </div>
@@ -74,10 +74,10 @@ export const DossierModal: React.FC<DossierModalProps> = ({
 
           <div className="p-3.5 rounded-xl bg-[#F4F4F5] border border-[#E4E4E7] text-[#3F3F46] text-xs flex items-center justify-between">
             <span className="font-mono text-[11px]">
-              Audit Hash: {dossier?.audit_hash || 'sha256:7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069'}
+              Report Fingerprint: {dossier?.audit_hash || 'sha256:7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069'}
             </span>
             <span className="font-medium text-[10px] uppercase tracking-wider bg-[#E4E4E7] px-2 py-0.5 rounded text-[#27272A]">
-              SHA-256 Verified
+              SHA-256 Computed
             </span>
           </div>
         </div>

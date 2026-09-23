@@ -19,10 +19,10 @@ The submitted project must be an original application that has not been publishe
 3. Live Public AWS Deployment:
 The application must be deployed publicly on AWS (CloudFront, Amplify, App Runner, or Lambda + API Gateway) and accessible by judges.
 
-4. AI Coding Agent Integration Proof:
-Builders must demonstrate verifiable proof that an AI coding agent (e.g. Agent Toolkit for AWS, Claude Code, Cursor, Kiro) was connected to AWS during development.
+4. AI Coding Agent Integration:
+Builders must demonstrate that an AI coding agent (e.g. Agent Toolkit for AWS, Claude Code, Cursor, Kiro) was connected to AWS during development.
 
-5. Technical Innovation & Precision:
+5. Technical Precision:
 Verification logic must be deterministic and verifiable, reaching at least 90% accuracy benchmark.
 
 6. Modern Runtime Environment:
@@ -79,7 +79,7 @@ export const RequirementModal: React.FC<RequirementModalProps> = ({
           />
 
           <p className="text-[11px] text-[#888888] leading-relaxed">
-            Bedrock parses unstructured text into structured rules. The Python rule engine then evaluates evidence deterministically against those rules.
+            Chronicle Ledger converts guidelines into structured rules, then checks your supporting material deterministically against each rule.
           </p>
         </div>
 

@@ -20,17 +20,19 @@
       "step_number": 17,
       "action": "Implemented complete custom error handling system, 404/500 pages, API correlation ID middleware, and React error boundary",
       "finding": "Created app/not-found.tsx, app/error.tsx, components/product-error-view.tsx, and components/error-boundary.tsx. Added request correlation ID middleware ('CL-XXXXXX') and structured JSON exception handlers in backend/main.py. Integrated offline detection banner and upload size limits in journal-dashboard.tsx. All 18 pytest tests and Next.js production build pass."
+    },
+    {
+      "step_number": 18,
+      "action": "Aligned UI terminology with user-first supporting material UX model and progressive disclosure",
+      "finding": "Eliminated detective/auditor jargon (Attach Evidence -> Add Supporting Material, Evidence Format -> File / Content Type, submission_proof.txt -> submission_notes.txt, Verified -> Satisfied, Missing Evidence -> Missing Material, Evidence Changed -> Material Changed). Positioned SHA-256 and AST grammar under clean 'Processing Details' progressive disclosure. All 18 pytest tests and Next.js 15 production build pass cleanly."
     }
   ],
   "active_files": [
-    "app/not-found.tsx",
-    "app/error.tsx",
-    "components/product-error-view.tsx",
-    "components/error-boundary.tsx",
-    "backend/main.py",
-    "backend/tests/test_api.py",
+    "components/evidence-modal.tsx",
     "components/journal-dashboard.tsx",
+    "components/requirement-modal.tsx",
+    "components/dossier-modal.tsx",
     ".agent_journal.json"
   ],
-  "next_step": "Commit and push custom error system enhancements to GitHub repository"
+  "next_step": "Commit and push supporting material UX updates to GitHub repository"
 }

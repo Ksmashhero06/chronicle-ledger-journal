@@ -8,13 +8,13 @@ interface EvidenceModalProps {
   loading: boolean;
 }
 
-const SAMPLE_EVIDENCE = `Chronicle Ledger v2 - Technical Evaluation, Benchmark & Deployment Report
+const SAMPLE_MATERIAL = `Chronicle Ledger v2 - Technical Evaluation, Benchmark & Deployment Notes
 Project: Chronicle Ledger v2 (#workplace-efficiency / #community)
 
 1. Original Application Status:
 Chronicle Ledger v2 is a newly architected AWS-native requirement verification platform, independently designed and built for Zero to Shipped 2026.
 
-2. Deterministic Verification Performance Benchmarks:
+2. Benchmark Performance Results:
 Evaluation benchmark accuracy reached 92.4% on complex rule parsing tests, exceeding standard requirements.
 Median latency observed was 142ms across serverless Lambda execution runs.
 
@@ -23,7 +23,7 @@ Production endpoint live on AWS CloudFront / API Gateway:
 https://chronicle-ledger-v2.awsapps.com
 All health checks passing across us-east-1 serverless cluster.
 
-4. AI Coding Agent Telemetry Traces:
+4. Developer Session Records:
 Built using AWS Agent Toolkit with 14 documented telemetry spans authenticated on Amazon Bedrock (Claude 3.5 Sonnet).`;
 
 export const EvidenceModal: React.FC<EvidenceModalProps> = ({
@@ -32,7 +32,7 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
   onSubmit,
   loading,
 }) => {
-  const [filename, setFilename] = useState('submission_proof.txt');
+  const [filename, setFilename] = useState('submission_notes.txt');
   const [fileType, setFileType] = useState('TEXT');
   const [content, setContent] = useState('');
 
@@ -44,9 +44,14 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#EEEEEE]">
           <div className="flex items-center gap-2">
             <Upload className="w-5 h-5 text-[#111111]" />
-            <h3 className="text-base font-semibold text-[#111111]">
-              Attach Evidence
-            </h3>
+            <div>
+              <h3 className="text-base font-semibold text-[#111111]">
+                Add Supporting Material
+              </h3>
+              <p className="text-[11px] text-[#666666]">
+                Add a file, log, result, or other material related to this requirement.
+              </p>
+            </div>
           </div>
           <button
             onClick={onClose}
@@ -60,42 +65,44 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="text-[11px] font-semibold text-[#444444] uppercase tracking-wide block mb-1">
-                Artifact Filename
+                File Name
               </label>
               <input
                 type="text"
                 value={filename}
                 onChange={(e) => setFilename(e.target.value)}
+                placeholder="submission_notes.txt"
                 className="w-full p-2.5 bg-[#F9F9F9] border border-[#E5E5E5] focus:border-[#111111] rounded-xl text-xs text-[#111111] focus:outline-none"
               />
             </div>
             <div>
               <label className="text-[11px] font-semibold text-[#444444] uppercase tracking-wide block mb-1">
-                Evidence Format
+                File / Content Type
               </label>
               <select
                 value={fileType}
                 onChange={(e) => setFileType(e.target.value)}
                 className="w-full p-2.5 bg-[#F9F9F9] border border-[#E5E5E5] focus:border-[#111111] rounded-xl text-xs text-[#111111] focus:outline-none"
               >
-                <option value="TEXT">Plaintext / Log</option>
-                <option value="MARKDOWN">Markdown Dossier</option>
+                <option value="TEXT">Plain text / Log</option>
+                <option value="MARKDOWN">Markdown Document</option>
                 <option value="JSON">Structured JSON</option>
-                <option value="GIT_LOG">Git Log Dump</option>
+                <option value="GIT_LOG">Git Log / Commit History</option>
               </select>
             </div>
           </div>
 
           <div className="flex items-center justify-between">
             <label className="text-[11px] font-semibold text-[#444444] uppercase tracking-wide">
-              Evidence Content
+              Content
             </label>
             <button
-              onClick={() => setContent(SAMPLE_EVIDENCE)}
+              type="button"
+              onClick={() => setContent(SAMPLE_MATERIAL)}
               className="inline-flex items-center gap-1.5 text-xs text-[#06B6D4] hover:text-[#0891B2] font-medium cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Load Sample Evidence</span>
+              <span>Load Example</span>
             </button>
           </div>
 
@@ -103,17 +110,18 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
             value={content}
             onChange={(e) => setContent(e.target.value)}
             rows={8}
-            placeholder="Paste logs, benchmark outputs, deployment URLs, or audit traces..."
+            placeholder="Paste logs, results, URLs, notes, or other relevant project material..."
             className="w-full p-3.5 bg-[#F9F9F9] border border-[#E5E5E5] focus:border-[#111111] rounded-xl text-xs font-mono focus:bg-white transition-all text-[#111111] resize-none focus:outline-none"
           />
 
           <p className="text-[11px] text-[#888888] leading-relaxed">
-            Evidence is hashed with SHA-256 upon ingestion. Character offsets are saved so reviewers can inspect the exact source span.
+            Processing details are available after you save this material.
           </p>
         </div>
 
         <div className="flex items-center justify-end gap-2.5 px-6 py-4 border-t border-[#EEEEEE] bg-[#FAFAFA]">
           <button
+            type="button"
             onClick={onClose}
             disabled={loading}
             className="px-4 py-2 rounded-full border border-[#DDDDDD] text-xs font-medium text-[#666666] hover:text-[#111111] hover:bg-white cursor-pointer"
@@ -121,11 +129,12 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
             Cancel
           </button>
           <button
+            type="button"
             onClick={() => onSubmit(filename, fileType, content)}
             disabled={loading || !content.trim()}
             className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#111111] hover:bg-black text-white text-xs font-medium cursor-pointer disabled:opacity-50"
           >
-            {loading ? 'Saving...' : 'Save Evidence'}
+            {loading ? 'Saving...' : 'Save Material'}
           </button>
         </div>
       </div>
