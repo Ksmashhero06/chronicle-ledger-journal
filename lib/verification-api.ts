@@ -1,6 +1,6 @@
 import type { Project, TelemetrySummary } from './verification-types';
 
-const API_BASE = 'http://localhost:8000/api';
+const API_BASE = process.env.NEXT_PUBLIC_VERIFICATION_API_URL || 'http://localhost:8000/api';
 
 export async function fetchProjects(): Promise<Project[]> {
   const res = await fetch(`${API_BASE}/projects`);
@@ -65,3 +65,21 @@ export async function fetchTelemetry(): Promise<TelemetrySummary> {
   if (!res.ok) throw new Error('Failed to fetch telemetry data');
   return res.json();
 }
+
+export async function replayVerification(projectId: string): Promise<Project> {
+  const res = await fetch(`${API_BASE}/projects/${projectId}/replay`, {
+    method: 'POST',
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || 'Verification replay failed');
+  }
+  return res.json();
+}
+
+export async function fetchReadiness(projectId: string): Promise<any> {
+  const res = await fetch(`${API_BASE}/projects/${projectId}/readiness`);
+  if (!res.ok) throw new Error('Failed to fetch explainable readiness breakdown');
+  return res.json();
+}
+

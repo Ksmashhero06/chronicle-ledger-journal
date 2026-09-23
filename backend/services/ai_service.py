@@ -108,7 +108,7 @@ Output ONLY valid JSON inside a ```json ``` block."""
     prompt_tokens = len(raw_text) // 4
     completion_tokens = 0
 
-    if bedrock and os.environ.get("AWS_ACCESS_KEY_ID"):
+    if bedrock:
         try:
             payload = {
                 "anthropic_version": "bedrock-2023-05-31",

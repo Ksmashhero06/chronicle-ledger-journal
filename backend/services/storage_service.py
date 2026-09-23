@@ -126,6 +126,12 @@ class StorageService:
         if not p:
             return None
         p.evidence_files.append(artifact)
+
+        # Stale detection: if verifications already exist with provenance, flag them as stale because evidence changed
+        for v in p.verifications:
+            if v.provenance and v.provenance.evidence_sha256 != artifact.sha256_hash:
+                v.is_stale = True
+
         prev_hash = p.audit_trail[-1].event_hash if p.audit_trail else None
         evt = create_audit_event(
             project_id,

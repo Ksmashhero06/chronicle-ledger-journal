@@ -14,6 +14,7 @@ class RuleType(str, Enum):
     BOOLEAN_ASSERTION = "BOOLEAN_ASSERTION"
     REGEX_MATCH = "REGEX_MATCH"
     VERSION_CONSTRAINT = "VERSION_CONSTRAINT"
+    CUSTOM_RULE = "CUSTOM_RULE"
 
 
 class VerificationStatus(str, Enum):
@@ -81,6 +82,9 @@ class Requirement(BaseModel):
     rule_definition: Dict[str, Any] = Field(..., description="Serialized rule parameters matching rule_type")
     severity: Severity = Field(Severity.CRITICAL, description="Requirement importance")
     status: VerificationStatus = Field(VerificationStatus.MISSING, description="Current verification state")
+    expression: Optional[str] = Field(None, description="Compiled safe rule expression e.g. 'accuracy >= 90 AND deployment_public == true'")
+    variables: Optional[List[str]] = Field(default_factory=list, description="Variables referenced by this requirement")
+    rule_hash: Optional[str] = Field(None, description="SHA-256 hash of the compiled rule")
 
 
 class ProvenanceCitation(BaseModel):
@@ -112,6 +116,10 @@ class VerificationRecord(BaseModel):
     deterministic_evaluation: Optional[DeterministicEvaluation] = None
     audit_hash: str = Field(..., description="Cryptographic SHA-256 fingerprint of the verification decision")
     assessed_at: str
+    is_stale: bool = Field(False, description="True if evidence changed after verification was computed")
+    verified_evidence_sha256: Optional[str] = Field(None, description="Hash of evidence at time of verification")
+    rule_hash: Optional[str] = Field(None, description="Hash of rule at time of verification")
+    evidence_trail: Optional[Dict[str, Any]] = Field(None, description="Full trace from requirement to rule, extracted fact, citation, hash, and status")
 
 
 class EvidenceArtifact(BaseModel):

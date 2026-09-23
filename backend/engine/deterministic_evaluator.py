@@ -179,20 +179,62 @@ def evaluate_version_rule(
         return False, expr, f"Version mismatch: {citation.extracted_value} fails {op} {min_v_str}.", VerificationStatus.NEEDS_REVIEW
 
 
+from .rule_parser import parse_rule, evaluate_node
+
+
+def evaluate_custom_rule(
+    expression: str, citation: ProvenanceCitation
+) -> Tuple[bool, str, str, VerificationStatus]:
+    """
+    Evaluates a custom rule expression against extracted facts using the safe AST parser.
+    No eval() is used.
+    """
+    try:
+        ast = parse_rule(expression)
+    except Exception as e:
+        return False, expression, f"Rule syntax compilation error: {str(e)}", VerificationStatus.NEEDS_REVIEW
+
+    # Prepare variable dictionary
+    if isinstance(citation.extracted_value, dict):
+        vars_dict = citation.extracted_value
+    else:
+        # Single value inferred into a generic fact name or variable
+        vars_dict = {
+            "value": citation.extracted_value,
+            "result": citation.extracted_value,
+            "fact": citation.extracted_value,
+        }
+
+    res, explanation = evaluate_node(ast, vars_dict)
+    if res is True:
+        status = VerificationStatus.VERIFIED
+        passed = True
+    elif res is False:
+        status = VerificationStatus.NEEDS_REVIEW
+        passed = False
+    else:
+        status = VerificationStatus.NEEDS_REVIEW
+        passed = False
+
+    return passed, expression, explanation, status
+
+
 def verify_requirement(
     req: Requirement, citation: Optional[ProvenanceCitation]
 ) -> VerificationRecord:
     """
     Main deterministic verification entry point.
     Combines structured requirement and candidate citation into an authoritative
-    verification record with cryptographic audit hash.
+    verification record with cryptographic audit hash, confidence gate, and evidence trail.
     """
     now_iso = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    rule_str = req.expression or str(req.rule_definition)
+    rule_hash = hashlib.sha256(rule_str.encode("utf-8")).hexdigest()[:16]
 
     # Case 1: No evidence attached
     if not citation:
         eval_data = DeterministicEvaluation(
-            expression="evidence_attached == False",
+            expression=req.expression or "evidence_attached == False",
             passed=False,
             explanation="No evidence document has been attached or matched for this requirement.",
             evaluated_at=now_iso,
@@ -209,13 +251,32 @@ def verify_requirement(
             deterministic_evaluation=eval_data,
             audit_hash=audit_hash,
             assessed_at=now_iso,
+            is_stale=False,
+            verified_evidence_sha256=None,
+            rule_hash=rule_hash,
+            evidence_trail={
+                "req_id": req.req_id,
+                "title": req.title,
+                "rule": req.expression or "evidence_attached == True",
+                "source_file": "None",
+                "extracted_fact": None,
+                "confidence": 0.0,
+                "confidence_gate": "MISSING",
+                "decision": "MISSING",
+                "why": "No evidence supplied for this requirement.",
+            },
         )
 
-    # Case 2: Evaluate according to rule_type
+    # Case 2: Evaluate according to rule_type or custom expression
     rule_type = req.rule_type
     rule_def = req.rule_definition
 
-    if rule_type == RuleType.NUMERIC_COMPARISON:
+    if req.expression and req.expression.strip():
+        passed, expr, explanation, status = evaluate_custom_rule(req.expression, citation)
+    elif rule_type == RuleType.CUSTOM_RULE:
+        expr_str = rule_def.get("expression", "")
+        passed, expr, explanation, status = evaluate_custom_rule(expr_str, citation)
+    elif rule_type == RuleType.NUMERIC_COMPARISON:
         passed, expr, explanation, status = evaluate_numeric_rule(rule_def, citation)
     elif rule_type == RuleType.PRESENCE_CHECK:
         passed, expr, explanation, status = evaluate_presence_rule(rule_def, citation)
@@ -231,12 +292,35 @@ def verify_requirement(
         explanation = "Unknown rule type."
         status = VerificationStatus.NEEDS_REVIEW
 
+    # Evidence Confidence Gate: If extraction confidence is low (< 0.75), route to human review
+    confidence_gate_passed = citation.confidence >= 0.75
+    if status == VerificationStatus.VERIFIED and not confidence_gate_passed:
+        status = VerificationStatus.NEEDS_REVIEW
+        explanation = f"{explanation} [Confidence Gate: extraction confidence {citation.confidence:.2f} is below 0.75 threshold; requires human review]"
+
     deterministic_eval = DeterministicEvaluation(
         expression=expr,
         passed=passed,
         explanation=explanation,
         evaluated_at=now_iso,
     )
+
+    # Evidence Trail ("Why this result?")
+    trail = {
+        "req_id": req.req_id,
+        "title": req.title,
+        "rule": expr,
+        "source_file": citation.evidence_file,
+        "page_number": citation.page_number,
+        "section_header": citation.section_header,
+        "verbatim_snippet": citation.verbatim_snippet,
+        "extracted_value": citation.extracted_value,
+        "confidence": citation.confidence,
+        "confidence_gate": "PASSED" if confidence_gate_passed else "NEEDS_REVIEW",
+        "sha256": citation.evidence_sha256,
+        "decision": status.value,
+        "why": explanation,
+    }
 
     # Compute tamper-evident audit hash
     evidence_sha = citation.evidence_sha256 if citation else "NONE"
@@ -252,24 +336,114 @@ def verify_requirement(
         deterministic_evaluation=deterministic_eval,
         audit_hash=audit_hash,
         assessed_at=now_iso,
+        is_stale=False,
+        verified_evidence_sha256=citation.evidence_sha256,
+        rule_hash=rule_hash,
+        evidence_trail=trail,
     )
 
 
-def compute_readiness_score(verifications: list[VerificationRecord]) -> Tuple[float, int, int, int]:
+def compute_weighted_readiness_score(
+    verifications: list[VerificationRecord],
+    requirements: Optional[list[Requirement]] = None
+) -> Dict[str, Any]:
     """
-    Computes weighted submission readiness score (0.0% to 100.0%)
-    and returns (readiness_pct, verified_count, needs_review_count, missing_count).
+    Computes explainable weighted readiness score based on requirement severity:
+    - CRITICAL: weight 3.0
+    - IMPORTANT: weight 2.0
+    - RECOMMENDED: weight 1.0
+
+    Status multipliers:
+    - VERIFIED: 1.0 credit
+    - NEEDS_REVIEW: 0.5 credit (cautionary partial credit)
+    - MISSING: 0.0 credit
     """
     if not verifications:
-        return 0.0, 0, 0, 0
+        return {
+            "score_pct": 0.0,
+            "verified_count": 0,
+            "needs_review_count": 0,
+            "missing_count": 0,
+            "stale_count": 0,
+            "earned_weight": 0.0,
+            "total_weight": 0.0,
+            "formula": "Readiness = 0.0% (no requirements found)",
+            "breakdown": [],
+        }
 
-    verified = sum(1 for v in verifications if v.status == VerificationStatus.VERIFIED)
-    needs_review = sum(1 for v in verifications if v.status == VerificationStatus.NEEDS_REVIEW)
-    missing = sum(1 for v in verifications if v.status == VerificationStatus.MISSING)
+    # Map requirement severity if available
+    req_map = {r.req_id: r for r in (requirements or [])}
 
-    total = len(verifications)
-    # Verified gives full credit (1.0), Needs Review gives partial caution credit (0.25), Missing gives 0.0
-    weighted_score = (verified * 1.0 + needs_review * 0.25) / total
-    score_pct = round(weighted_score * 100.0, 1)
+    total_weight = 0.0
+    earned_weight = 0.0
+    verified_count = 0
+    needs_review_count = 0
+    missing_count = 0
+    stale_count = 0
+    breakdown = []
 
-    return score_pct, verified, needs_review, missing
+    for v in verifications:
+        req = req_map.get(v.req_id)
+        severity = getattr(req, "severity", "CRITICAL")
+        if isinstance(severity, str):
+            sev_upper = severity.upper()
+        else:
+            sev_upper = getattr(severity, "value", "CRITICAL")
+
+        weight = 3.0 if sev_upper == "CRITICAL" else (2.0 if sev_upper == "IMPORTANT" else 1.0)
+        total_weight += weight
+
+        if v.is_stale:
+            stale_count += 1
+
+        if v.status == VerificationStatus.VERIFIED:
+            verified_count += 1
+            credit = 1.0
+        elif v.status == VerificationStatus.NEEDS_REVIEW:
+            needs_review_count += 1
+            credit = 0.25
+        else:
+            missing_count += 1
+            credit = 0.0
+
+        item_earned = weight * credit
+        earned_weight += item_earned
+
+        breakdown.append({
+            "req_id": v.req_id,
+            "severity": sev_upper,
+            "weight": weight,
+            "credit": credit,
+            "earned": item_earned,
+            "status": v.status.value,
+            "is_stale": v.is_stale,
+        })
+
+    score_pct = round((earned_weight / total_weight) * 100.0, 1) if total_weight > 0 else 0.0
+    formula = (
+        f"Readiness = ({earned_weight:.1f} earned / {total_weight:.1f} total weight) * 100 = {score_pct:.1f}% "
+        f"[Verified: {verified_count}, Review: {needs_review_count}, Missing: {missing_count}]"
+    )
+
+    return {
+        "score_pct": score_pct,
+        "verified_count": verified_count,
+        "needs_review_count": needs_review_count,
+        "missing_count": missing_count,
+        "stale_count": stale_count,
+        "earned_weight": round(earned_weight, 2),
+        "total_weight": round(total_weight, 2),
+        "formula": formula,
+        "breakdown": breakdown,
+    }
+
+
+def compute_readiness_score(verifications: list[VerificationRecord]) -> Tuple[float, int, int, int]:
+    """Backwards-compatible tuple return: (readiness_pct, verified, needs_review, missing)."""
+    summary = compute_weighted_readiness_score(verifications)
+    return (
+        summary["score_pct"],
+        summary["verified_count"],
+        summary["needs_review_count"],
+        summary["missing_count"],
+    )

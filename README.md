@@ -19,33 +19,62 @@ The model never decides the final verdict. It only populates values for the rule
 ## How verification works
 
 ```
-Requirements Document
-        │
-        ▼
-Bedrock (Claude) ──────► Extracted Variables + Verbatim Spans
+Requirements Document ────► Requirement Compiler (Safe Tiny AST Parser)
                                     │
-Evidence Files                      │
-  (logs, git, JSON) ──► SHA-256     │
-        │                Hash       │
+Evidence Files                      ▼
+  (PDF, Git log, JSON, CLI)    Structured Rule (e.g. accuracy >= 90)
+        │                           │
+        ▼                           │
+ Evidence Normalization Layer       │
+        │                           │
+        ▼                           │
+ Bedrock Fact Extraction            │
+        │                           │
+        ▼                           │
+ Evidence Confidence Gate (< 0.75 ─► NEEDS_REVIEW)
+        │                           │
+        ▼                           │
+ Extracted Facts + Exact Spans      │
+        │                           │
         └─────────────────┬─────────┘
                           │
                           ▼
-                 Python Rule Engine (AST)
+            Deterministic AST Evaluator (Zero eval)
                           │
              ┌────────────┼────────────┐
              ▼            ▼            ▼
-        PROVEN_TRUE  PROVEN_FALSE  EVIDENCE_INSUFFICIENT
+        PROVEN_TRUE  PROVEN_FALSE  NEEDS_REVIEW
              │
+             ├────────► Evidence Trail ("Why this result?")
+             ├────────► Verification Replay & Stale Detection
              ▼
-     Readiness Score + Audit Record
+    Weighted Readiness Score + SHA-256 Provenance Ledger
 ```
 
-Each verification run produces one of three statuses:
-- **`PROVEN_TRUE`**: The evidence provided valid values that satisfy the rule.
-- **`PROVEN_FALSE`**: Values were found, but they violate the rule.
-- **`EVIDENCE_INSUFFICIENT`**: The required fields could not be found in the evidence, or the extraction confidence was too low.
+### The 5 Core Verification Systems
 
-Every piece of evidence is hashed with SHA-256 upon ingestion, and citations store character offsets (`char_start`, `char_end`) so a reviewer can inspect the source snippet directly.
+1. **Requirement Compiler & Safe Rule Language**:
+   Instead of executing arbitrary Python code via `eval()`, Chronicle Ledger compiles natural language requirements into a restricted, safe Abstract Syntax Tree (AST). It only parses explicit operators (`AND`, `OR`, `NOT`, `==`, `!=`, `<`, `<=`, `>`, `>=`) and identifiers.
+
+2. **Evidence Normalization Layer**:
+   Before extraction, heterogeneous formats (PDFs, Markdown docs, Git commit histories, JSON outputs, CLI deploy traces) are normalized into a canonical internal schema with cryptographic SHA-256 hashing.
+
+3. **Evidence Confidence Gate**:
+   AI extraction is probabilistic; rule evaluation is deterministic. When extraction confidence falls below the 0.75 threshold, the system halts automatic qualification and routes the requirement to `NEEDS_REVIEW` with an explicit human-in-the-loop notice.
+
+4. **Evidence Trail ("Why this result?")**:
+   Every verification result produces an explainable proof chain:
+   `Requirement → Rule AST → Evidence File (SHA-256) → Citation Quote → Extracted Fact → Evaluation Decision → Cryptographic Audit Fingerprint`.
+
+5. **Verification Replay & Stale Detection**:
+   When active evidence changes or new files are uploaded, Chronicle Ledger compares the active SHA-256 hash against the verified record hash. If they differ, the verification is automatically flagged as `STALE`, offering one-click reproducible re-evaluation.
+
+6. **Explainable Weighted Readiness Scoring**:
+   Readiness is calculated transparently using category and severity weights:
+   `Readiness = (∑ [Severity Weight × Result Credit]) / (∑ Total Weight) × 100%`
+   - Severity Weights: Critical (3x), Important (2x), Recommended (1x).
+   - Result Credits: Verified = 1.0, Needs Review = 0.25, Missing = 0.0.
+
 
 ## Examples
 

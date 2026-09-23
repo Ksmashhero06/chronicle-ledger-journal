@@ -86,3 +86,47 @@ def test_full_verification_flow():
     dossier = res_dos.json()
     assert dossier["cryptographic_dossier_hash"] is not None
     assert len(dossier["evidence_ledger"]) >= 3
+
+    # 6. Check Explainable Readiness Breakdown
+    res_read = client.get(f"/api/projects/{pid}/readiness")
+    assert res_read.status_code == 200
+    readiness_data = res_read.json()
+    assert "formula" in readiness_data
+    assert readiness_data["total_weight"] > 0
+
+    # 7. Verification Replay
+    res_rep = client.post(f"/api/projects/{pid}/replay")
+    assert res_rep.status_code == 200
+    assert res_rep.json()["project_id"] == pid
+
+
+def test_rule_test_lab_api():
+    req_payload = {
+        "expression": "accuracy >= 90 AND deployment_public == true",
+        "test_cases": [
+            {
+                "name": "Above threshold on AWS",
+                "inputs": {"accuracy": 92.4, "deployment_public": True},
+                "expected": "TRUE"
+            },
+            {
+                "name": "Below threshold",
+                "inputs": {"accuracy": 72.0, "deployment_public": True},
+                "expected": "FALSE"
+            },
+            {
+                "name": "Missing accuracy variable",
+                "inputs": {"deployment_public": True},
+                "expected": "INSUFFICIENT"
+            }
+        ]
+    }
+    res = client.post("/api/verification/test-rule", json=req_payload)
+    assert res.status_code == 200
+    data = res.json()
+    assert data["all_passed"] is True
+    assert len(data["results"]) == 3
+    assert data["results"][0]["actual"] == "TRUE"
+    assert data["results"][1]["actual"] == "FALSE"
+    assert data["results"][2]["actual"] == "INSUFFICIENT"
+

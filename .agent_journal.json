@@ -1,25 +1,39 @@
 {
-  "current_objective": "Audit codebase for code quality, consistency, and tests",
+  "current_objective": "Implement Requirement Compiler, Safe AST Parser, Rule Test Lab, Confidence Gate, Verification Replay, and elevate Verification to primary product",
   "steps_completed": [
     {
       "step_number": 10,
       "action": "Humanized documentation, UI copy, and backend code comments for natural developer authorship",
       "finding": "Rewrote README.md to 5-7 minute read with clear problem-first structure, humanized UI copy across all 5 verification components (Report instead of Dossier, Agent Activity instead of Telemetry HUD, Add Rules/Evidence, etc.), cleaned docstrings and comments in Python backend, and verified all 9 pytest tests and Next.js production build pass."
+    },
+    {
+      "step_number": 11,
+      "action": "Built and tested custom safe rule parser and AST engine in backend/engine/rule_parser.py",
+      "finding": "Implemented AST nodes, tokenizer, recursive descent parser (handling AND, OR, NOT, comparisons, and literals without eval()), fixed boolean-vs-int coercion, and passed all 7 tests in test_parser.py."
+    },
+    {
+      "step_number": 12,
+      "action": "Integrated safe AST evaluation, confidence gate, evidence trail, verification replay, and rule test lab API",
+      "finding": "Implemented evidence normalization layer, confidence gate (< 0.75 routed to NEEDS_REVIEW), evidence trail explainability dict, stale detection in storage, test-rule lab endpoint, and explainable weighted readiness scoring. All 17 tests in test_api, test_evaluator, and test_parser pass."
+    },
+    {
+      "step_number": 15,
+      "action": "Staged and committed all Chronicle Ledger v2 enhancements, safe AST parser, Rule Test Lab, and production audit fixes to GitHub",
+      "finding": "Clean commit including custom recursive descent AST rule parser, rule test lab modal, verification replay, confidence gating, explainable weighted readiness scoring, and documentation updates."
     }
   ],
   "active_files": [
-    "README.md",
-    "backend/engine/deterministic_evaluator.py",
-    "backend/main.py",
-    "backend/services/ai_service.py",
-    "backend/services/provenance_service.py",
     "components/journal-dashboard.tsx",
-    "components/dossier-modal.tsx",
-    "components/evidence-modal.tsx",
-    "components/requirement-modal.tsx",
-    "components/telemetry-modal.tsx",
-    "components/landing-view.tsx",
+    "components/rule-lab-modal.tsx",
+    "backend/engine/rule_parser.py",
+    "backend/engine/deterministic_evaluator.py",
+    "backend/services/evidence_normalizer.py",
+    "backend/services/storage_service.py",
+    "backend/services/ai_service.py",
+    "lib/verification-api.ts",
+    "README.md",
+    ".agent_code_map.md",
     ".agent_journal.json"
   ],
-  "next_step": "Run automated verification across frontend, backend, and grep search for stale artifacts."
+  "next_step": "Push commits to remote origin/main on GitHub"
 }

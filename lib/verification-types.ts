@@ -3,7 +3,8 @@ export type RuleType =
   | 'PRESENCE_CHECK'
   | 'BOOLEAN_ASSERTION'
   | 'REGEX_MATCH'
-  | 'VERSION_CONSTRAINT';
+  | 'VERSION_CONSTRAINT'
+  | 'CUSTOM_RULE';
 
 export type VerificationStatus = 'VERIFIED' | 'NEEDS_REVIEW' | 'MISSING';
 
@@ -19,6 +20,9 @@ export interface Requirement {
   rule_definition: Record<string, any>;
   severity: Severity;
   status: VerificationStatus;
+  expression?: string;
+  variables?: string[];
+  rule_hash?: string;
 }
 
 export interface ProvenanceCitation {
@@ -50,6 +54,10 @@ export interface VerificationRecord {
   deterministic_evaluation?: DeterministicEvaluation;
   audit_hash: string;
   assessed_at: string;
+  is_stale?: boolean;
+  verified_evidence_sha256?: string;
+  rule_hash?: string;
+  evidence_trail?: Record<string, any>;
 }
 
 export interface EvidenceArtifact {

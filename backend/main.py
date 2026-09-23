@@ -18,8 +18,10 @@ from .engine.rule_schema import (
     VerificationRecord,
     VerificationStatus,
 )
-from .engine.deterministic_evaluator import verify_requirement, compute_readiness_score
+from .engine.deterministic_evaluator import verify_requirement, compute_readiness_score, compute_weighted_readiness_score
+from .engine.rule_parser import run_rule_test_lab
 from .services.storage_service import storage
+from .services.evidence_normalizer import normalize_evidence
 from .services.ai_service import (
     extract_requirements_from_text,
     match_evidence_to_requirements,
@@ -40,6 +42,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+class RuleTestLabRequest(BaseModel):
+    expression: str
+    test_cases: List[Dict[str, Any]]
 
 
 class ProjectCreateRequest(BaseModel):
@@ -115,24 +122,66 @@ def upload_evidence(project_id: str, req: UploadEvidenceRequest):
     if not p:
         raise HTTPException(status_code=404, detail="Project not found")
 
-    sha256_hash = compute_sha256_text(req.content_text)
+    if len(req.content_text) > 5 * 1024 * 1024:
+        raise HTTPException(status_code=413, detail="Evidence content exceeds maximum allowable payload size (5MB).")
+
+    safe_filename = os.path.basename(req.filename.replace("\\", "/")) or "evidence_artifact.txt"
+
+    # Ingest and normalize evidence
+    evidence_id = f"evi_{compute_sha256_text(req.content_text)[:10]}"
+    normalized = normalize_evidence(
+        source_id=evidence_id,
+        filename=safe_filename,
+        raw_content=req.content_text,
+        explicit_type=req.file_type,
+    )
     now_iso = datetime.datetime.now(datetime.timezone.utc).isoformat()
-    evidence_id = f"evi_{sha256_hash[:10]}"
 
     artifact = EvidenceArtifact(
         evidence_id=evidence_id,
         project_id=project_id,
-        filename=req.filename,
-        file_type=req.file_type,
-        sha256_hash=sha256_hash,
+        filename=safe_filename,
+        file_type=normalized.source_type,
+        sha256_hash=normalized.sha256_hash,
         byte_size=len(req.content_text.encode("utf-8")),
         uploaded_at=now_iso,
-        storage_uri=f"s3://chronicle-ledger-evidence-us-east-1/{project_id}/{req.filename}",
-        extracted_text_preview=req.content_text[:500],
+        storage_uri=f"s3://chronicle-ledger-evidence-us-east-1/{project_id}/{safe_filename}",
+        extracted_text_preview=normalized.content[:800],
     )
 
     storage.add_evidence_artifact(project_id, artifact)
     return storage.get_project(project_id)
+
+
+@app.post("/api/verification/test-rule")
+def test_rule_lab(req: RuleTestLabRequest):
+    """Rule Test Lab: verifies AST correctness and deterministic evaluation against supplied test cases."""
+    results = run_rule_test_lab(req.expression, req.test_cases)
+    all_passed = all(r.get("passed", False) for r in results)
+    return {
+        "expression": req.expression,
+        "all_passed": all_passed,
+        "results": results,
+    }
+
+
+@app.get("/api/projects/{project_id}/readiness")
+def get_project_readiness(project_id: str):
+    """Returns an explainable weighted readiness breakdown with exact mathematical formula."""
+    p = storage.get_project(project_id)
+    if not p:
+        raise HTTPException(status_code=404, detail="Project not found")
+
+    return compute_weighted_readiness_score(p.verifications, p.requirements)
+
+
+@app.post("/api/projects/{project_id}/replay", response_model=Project)
+def replay_verifications(project_id: str):
+    """
+    Verification Replay: Re-evaluates all requirements against active evidence,
+    updating stale verifications and recomputing the readiness state.
+    """
+    return run_verification(project_id)
 
 
 @app.post("/api/projects/{project_id}/verify", response_model=Project)
