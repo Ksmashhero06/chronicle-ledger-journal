@@ -32,6 +32,7 @@ import {
   Minus,
   Smile,
   CheckCircle2,
+  Clipboard,
 } from 'lucide-react';
 
 export type PublishingTarget = 'linkedin' | 'website' | 'markdown' | 'html' | 'plaintext';
@@ -75,6 +76,9 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
   const [articleTitle, setArticleTitle] = useState<string>(initialTitle);
   const [articleSubtitle, setArticleSubtitle] = useState<string>('');
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'unsaved'>('saved');
+  const [lastSavedTime, setLastSavedTime] = useState<string>(
+    new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  );
   const [copiedFormat, setCopiedFormat] = useState<string | null>(null);
 
   // Version History
@@ -232,6 +236,19 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
     handleEditorChange();
   };
 
+  // Paste without formatting
+  const handlePasteClean = async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      if (text) {
+        document.execCommand('insertText', false, text);
+        handleEditorChange();
+      }
+    } catch {
+      alert('Please use Ctrl+Shift+V or paste plain text directly.');
+    }
+  };
+
   // Trigger Contextual AI Action on selected text
   const handleAiAction = async (action: string, targetLang?: string) => {
     if (!selectedText) return;
@@ -280,16 +297,18 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
 
   // Create Version Checkpoint
   const createCheckpoint = (label: string) => {
+    const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const newVersion: ContentVersion = {
       version: history.length + 1,
       label,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      timestamp: nowTime,
       content: getEditorHtml(),
       title: articleTitle,
       subtitle: articleSubtitle,
     };
     setHistory((prev) => [newVersion, ...prev]);
     setSaveStatus('saved');
+    setLastSavedTime(nowTime);
     if (onSave) onSave(getEditorHtml());
   };
 
@@ -300,7 +319,9 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
       if (editorRef.current) {
         editorRef.current.innerHTML = originalContent;
       }
+      const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       setSaveStatus('saved');
+      setLastSavedTime(nowTime);
     }
   };
 
@@ -310,7 +331,9 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
       editorRef.current.innerHTML = ver.content;
       if (ver.title) setArticleTitle(ver.title);
       if (ver.subtitle) setArticleSubtitle(ver.subtitle);
+      const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       setSaveStatus('saved');
+      setLastSavedTime(nowTime);
       setShowHistoryModal(false);
       createCheckpoint(`Restored v${ver.version}`);
     }
@@ -403,13 +426,13 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
               <div className="flex items-center gap-2">
                 <h2 className="text-sm sm:text-base font-semibold text-[#111111]">Content Studio</h2>
                 <span className="hidden sm:inline-block px-2 py-0.5 rounded-full text-[10px] font-mono bg-[#F5F5F5] border border-[#E5E5E5] text-[#666666]">
-                  Publication Ready
+                  Ready to edit
                 </span>
-                <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium flex items-center gap-1 ${
-                  saveStatus === 'saved' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
+                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-medium flex items-center gap-1.5 ${
+                  saveStatus === 'saved' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-amber-50 text-amber-800 border border-amber-200'
                 }`}>
                   <span className={`w-1.5 h-1.5 rounded-full ${saveStatus === 'saved' ? 'bg-emerald-500' : 'bg-amber-500'}`} />
-                  {saveStatus === 'saved' ? 'Saved' : 'Unsaved changes'}
+                  {saveStatus === 'saved' ? `Saved ${lastSavedTime}` : 'Unsaved changes'}
                 </span>
               </div>
               <p className="text-[11px] text-[#666666]">
@@ -623,6 +646,15 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
               >
                 <RotateCw className="w-3.5 h-3.5" />
               </button>
+
+              <button
+                onClick={handlePasteClean}
+                className="p-1.5 rounded hover:bg-white hover:shadow-2xs text-[#666666] hover:text-[#111111] cursor-pointer flex items-center gap-1 text-[11px]"
+                title="Paste without formatting (Clean Plain Text)"
+              >
+                <Clipboard className="w-3.5 h-3.5 text-[#555555]" />
+                <span className="hidden md:inline">Paste Clean</span>
+              </button>
             </div>
 
             {/* Quick Actions */}
@@ -830,6 +862,13 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
                   onInput={handleEditorChange}
                   onMouseUp={handleSelection}
                   onKeyUp={handleSelection}
+                  onPaste={(e) => {
+                    // Prevent external HTML style contamination; paste clean plain text
+                    e.preventDefault();
+                    const text = e.clipboardData.getData('text/plain');
+                    document.execCommand('insertText', false, text);
+                    handleEditorChange();
+                  }}
                   className="w-full min-h-[360px] p-6 bg-white rounded-2xl border border-[#EEEEEE] shadow-2xs text-[#111111] text-sm sm:text-base leading-relaxed focus:outline-none prose max-w-none focus:border-[#111111] transition-all"
                   style={{ minHeight: '380px' }}
                 />
@@ -956,7 +995,7 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#DDDDDD] bg-white hover:bg-[#F5F5F5] text-xs font-medium text-[#111111] cursor-pointer shadow-2xs"
             >
               {copiedFormat === 'formatted' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copiedFormat === 'formatted' ? 'Copied' : 'Copy Formatted'}</span>
+              <span>{copiedFormat === 'formatted' ? 'Copied' : 'Copy Rich Text'}</span>
             </button>
 
             <button

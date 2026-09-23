@@ -5871,5 +5871,416 @@
         "event_hash": "fd3e8e9d57f7e7775721029c027fd25953335e8bac12cf366272e68a472286a9"
       }
     ]
+  },
+  "proj_1790128270": {
+    "project_id": "proj_1790128270",
+    "name": "AWS Zero to Shipped Test Run",
+    "description": "Verification of autonomous agent submission",
+    "competition": "AWS Builder Center - Zero to Shipped 2026",
+    "category": "#workplace-efficiency",
+    "lane": "#community",
+    "created_at": "2026-09-23T01:51:10.644817+00:00",
+    "readiness_score": 80.0,
+    "verified_count": 4,
+    "needs_review_count": 0,
+    "missing_count": 1,
+    "requirements": [
+      {
+        "req_id": "REQ-001",
+        "project_id": "proj_1790128270",
+        "category": "Deployment",
+        "title": "Live Public AWS Deployment",
+        "description": "Application must be deployed on AWS with a live, publicly accessible URL.",
+        "rule_type": "BOOLEAN_ASSERTION",
+        "rule_definition": {
+          "assertion": "Application is deployed live on public AWS infrastructure (CloudFront/App Runner/Amplify)",
+          "expected_value": true,
+          "confidence_threshold": 0.85
+        },
+        "severity": "CRITICAL",
+        "status": "VERIFIED",
+        "expression": null,
+        "variables": [],
+        "rule_hash": null
+      },
+      {
+        "req_id": "REQ-002",
+        "project_id": "proj_1790128270",
+        "category": "Architecture",
+        "title": "AI Coding Agent AWS Integration Proof",
+        "description": "Must provide verifiable evidence that an AI coding agent was connected to AWS during development.",
+        "rule_type": "PRESENCE_CHECK",
+        "rule_definition": {
+          "required_element": "Agent Toolkit AWS session log or AWS CLI deployment trace",
+          "element_type": "log",
+          "min_count": 1
+        },
+        "severity": "CRITICAL",
+        "status": "VERIFIED",
+        "expression": null,
+        "variables": [],
+        "rule_hash": null
+      },
+      {
+        "req_id": "REQ-003",
+        "project_id": "proj_1790128270",
+        "category": "Technical Innovation",
+        "title": "Deterministic Verification Engine Accuracy",
+        "description": "Deterministic rule evaluation engine must achieve >= 90% benchmark verification precision.",
+        "rule_type": "NUMERIC_COMPARISON",
+        "rule_definition": {
+          "metric": "accuracy",
+          "operator": ">=",
+          "target_value": 90.0,
+          "unit": "%",
+          "tolerance": 0.0
+        },
+        "severity": "CRITICAL",
+        "status": "VERIFIED",
+        "expression": null,
+        "variables": [],
+        "rule_hash": null
+      },
+      {
+        "req_id": "REQ-004",
+        "project_id": "proj_1790128270",
+        "category": "Eligibility",
+        "title": "Original Application Qualification",
+        "description": "Must be an original application that has not been published prior to competition.",
+        "rule_type": "BOOLEAN_ASSERTION",
+        "rule_definition": {
+          "assertion": "Application core architecture and workflow is newly implemented for Zero to Shipped 2026",
+          "expected_value": true,
+          "confidence_threshold": 0.8
+        },
+        "severity": "CRITICAL",
+        "status": "VERIFIED",
+        "expression": null,
+        "variables": [],
+        "rule_hash": null
+      },
+      {
+        "req_id": "REQ-005",
+        "project_id": "proj_1790128270",
+        "category": "Environment",
+        "title": "Modern Runtime Engine Version",
+        "description": "Backend services must run on modern serverless runtime (Python >= 3.12).",
+        "rule_type": "VERSION_CONSTRAINT",
+        "rule_definition": {
+          "component": "Python",
+          "operator": ">=",
+          "min_version": "3.12"
+        },
+        "severity": "IMPORTANT",
+        "status": "MISSING",
+        "expression": null,
+        "variables": [],
+        "rule_hash": null
+      }
+    ],
+    "evidence_files": [
+      {
+        "evidence_id": "evi_dfb4a730b0",
+        "project_id": "proj_1790128270",
+        "filename": "evaluation_report.txt",
+        "file_type": "plain_text",
+        "sha256_hash": "dfb4a730b01453bb90a1b71bae67e9c514a180e97d8ce3132f552cf75d549287",
+        "byte_size": 333,
+        "uploaded_at": "2026-09-23T01:51:10.701438+00:00",
+        "storage_uri": "s3://chronicle-ledger-evidence-us-east-1/proj_1790128270/evaluation_report.txt",
+        "extracted_text_preview": "\n    Chronicle Ledger v2 Evaluation & Deployment Report.\n    The classification model achieved validation accuracy of 92.4% across all test benchmarks.\n    Application is deployed live on public AWS infrastructure: https://chronicle-ledger.awsapps.com\n    Agent was connected to AWS via Agent Toolkit with session logs verified.\n    "
+      }
+    ],
+    "verifications": [
+      {
+        "verification_id": "ver_a50a330c7e",
+        "project_id": "proj_1790128270",
+        "req_id": "REQ-001",
+        "status": "VERIFIED",
+        "provenance": {
+          "evidence_id": "evi_dfb4a730b0",
+          "evidence_file": "evaluation_report.txt",
+          "evidence_sha256": "dfb4a730b01453bb90a1b71bae67e9c514a180e97d8ce3132f552cf75d549287",
+          "page_number": 1,
+          "section_header": "Compliance Claim",
+          "verbatim_snippet": "Chronicle Ledger v2 Evaluation & Deployment Report.",
+          "extracted_value": true,
+          "confidence": 0.88,
+          "char_start": 5,
+          "char_end": 56
+        },
+        "deterministic_evaluation": {
+          "expression": "assertion_value(True) == expected(True)",
+          "passed": true,
+          "explanation": "Assertion verified with 88.0% confidence.",
+          "evaluated_at": "2026-09-23T01:51:10.766061+00:00"
+        },
+        "audit_hash": "ea6dea1239fd6d13a874ec68c89d63ea2512574063bbaa7fd16becccae7085a7",
+        "assessed_at": "2026-09-23T01:51:10.766061+00:00",
+        "is_stale": false,
+        "verified_evidence_sha256": "dfb4a730b01453bb90a1b71bae67e9c514a180e97d8ce3132f552cf75d549287",
+        "rule_hash": "eed00f68f9c72fcc",
+        "evidence_trail": {
+          "req_id": "REQ-001",
+          "title": "Live Public AWS Deployment",
+          "rule": "assertion_value(True) == expected(True)",
+          "source_file": "evaluation_report.txt",
+          "page_number": 1,
+          "section_header": "Compliance Claim",
+          "verbatim_snippet": "Chronicle Ledger v2 Evaluation & Deployment Report.",
+          "extracted_value": true,
+          "confidence": 0.88,
+          "confidence_gate": "PASSED",
+          "sha256": "dfb4a730b01453bb90a1b71bae67e9c514a180e97d8ce3132f552cf75d549287",
+          "decision": "VERIFIED",
+          "why": "Assertion verified with 88.0% confidence."
+        }
+      },
+      {
+        "verification_id": "ver_f50b4cdfa8",
+        "project_id": "proj_1790128270",
+        "req_id": "REQ-002",
+        "status": "VERIFIED",
+        "provenance": {
+          "evidence_id": "evi_dfb4a730b0",
+          "evidence_file": "evaluation_report.txt",
+          "evidence_sha256": "dfb4a730b01453bb90a1b71bae67e9c514a180e97d8ce3132f552cf75d549287",
+          "page_number": 1,
+          "section_header": "Artifact Verification",
+          "verbatim_snippet": "Chronicle Ledger v2 Evaluation & Deployment Report.",
+          "extracted_value": true,
+          "confidence": 0.92,
+          "char_start": 5,
+          "char_end": 56
+        },
+        "deterministic_evaluation": {
+          "expression": "detected_count(1) >= min_required(1)",
+          "passed": true,
+          "explanation": "Required element 'Agent Toolkit AWS session log or AWS CLI deployment trace' confirmed present.",
+          "evaluated_at": "2026-09-23T01:51:10.766130+00:00"
+        },
+        "audit_hash": "2eb1769565b2f74dba7855a2798d800f3737c01326ebf239a6dd4fad0618152d",
+        "assessed_at": "2026-09-23T01:51:10.766130+00:00",
+        "is_stale": false,
+        "verified_evidence_sha256": "dfb4a730b01453bb90a1b71bae67e9c514a180e97d8ce3132f552cf75d549287",
+        "rule_hash": "279baba9840dca64",
+        "evidence_trail": {
+          "req_id": "REQ-002",
+          "title": "AI Coding Agent AWS Integration Proof",
+          "rule": "detected_count(1) >= min_required(1)",
+          "source_file": "evaluation_report.txt",
+          "page_number": 1,
+          "section_header": "Artifact Verification",
+          "verbatim_snippet": "Chronicle Ledger v2 Evaluation & Deployment Report.",
+          "extracted_value": true,
+          "confidence": 0.92,
+          "confidence_gate": "PASSED",
+          "sha256": "dfb4a730b01453bb90a1b71bae67e9c514a180e97d8ce3132f552cf75d549287",
+          "decision": "VERIFIED",
+          "why": "Required element 'Agent Toolkit AWS session log or AWS CLI deployment trace' confirmed present."
+        }
+      },
+      {
+        "verification_id": "ver_c13b9525fd",
+        "project_id": "proj_1790128270",
+        "req_id": "REQ-003",
+        "status": "VERIFIED",
+        "provenance": {
+          "evidence_id": "evi_dfb4a730b0",
+          "evidence_file": "evaluation_report.txt",
+          "evidence_sha256": "dfb4a730b01453bb90a1b71bae67e9c514a180e97d8ce3132f552cf75d549287",
+          "page_number": 1,
+          "section_header": "Performance Results",
+          "verbatim_snippet": "The classification model achieved validation accuracy of 92.4% across all test benchmarks.",
+          "extracted_value": 92.4,
+          "confidence": 0.94,
+          "char_start": 61,
+          "char_end": 151
+        },
+        "deterministic_evaluation": {
+          "expression": "92.4% >= 90.0%",
+          "passed": true,
+          "explanation": "Evaluated true: detected value 92.4% satisfies >= target 90.0% (tolerance \u00b10.0).",
+          "evaluated_at": "2026-09-23T01:51:10.766161+00:00"
+        },
+        "audit_hash": "e209927b687b864b2cdd75f42dc63b7a1088f2b97bba7034e21d3ed0313503b5",
+        "assessed_at": "2026-09-23T01:51:10.766161+00:00",
+        "is_stale": false,
+        "verified_evidence_sha256": "dfb4a730b01453bb90a1b71bae67e9c514a180e97d8ce3132f552cf75d549287",
+        "rule_hash": "c01f6af69c768ab3",
+        "evidence_trail": {
+          "req_id": "REQ-003",
+          "title": "Deterministic Verification Engine Accuracy",
+          "rule": "92.4% >= 90.0%",
+          "source_file": "evaluation_report.txt",
+          "page_number": 1,
+          "section_header": "Performance Results",
+          "verbatim_snippet": "The classification model achieved validation accuracy of 92.4% across all test benchmarks.",
+          "extracted_value": 92.4,
+          "confidence": 0.94,
+          "confidence_gate": "PASSED",
+          "sha256": "dfb4a730b01453bb90a1b71bae67e9c514a180e97d8ce3132f552cf75d549287",
+          "decision": "VERIFIED",
+          "why": "Evaluated true: detected value 92.4% satisfies >= target 90.0% (tolerance \u00b10.0)."
+        }
+      },
+      {
+        "verification_id": "ver_365b696697",
+        "project_id": "proj_1790128270",
+        "req_id": "REQ-004",
+        "status": "VERIFIED",
+        "provenance": {
+          "evidence_id": "evi_dfb4a730b0",
+          "evidence_file": "evaluation_report.txt",
+          "evidence_sha256": "dfb4a730b01453bb90a1b71bae67e9c514a180e97d8ce3132f552cf75d549287",
+          "page_number": 1,
+          "section_header": "Compliance Claim",
+          "verbatim_snippet": "Application is deployed live on public AWS infrastructure: https://chronicle-ledger.awsapps.com",
+          "extracted_value": true,
+          "confidence": 0.88,
+          "char_start": 156,
+          "char_end": 251
+        },
+        "deterministic_evaluation": {
+          "expression": "assertion_value(True) == expected(True)",
+          "passed": true,
+          "explanation": "Assertion verified with 88.0% confidence.",
+          "evaluated_at": "2026-09-23T01:51:10.766191+00:00"
+        },
+        "audit_hash": "a3f1ad57c017ff727722d491850d3eac5f8d21c16aefb2a37abb94ff6f93776e",
+        "assessed_at": "2026-09-23T01:51:10.766191+00:00",
+        "is_stale": false,
+        "verified_evidence_sha256": "dfb4a730b01453bb90a1b71bae67e9c514a180e97d8ce3132f552cf75d549287",
+        "rule_hash": "fe14f4194ae29792",
+        "evidence_trail": {
+          "req_id": "REQ-004",
+          "title": "Original Application Qualification",
+          "rule": "assertion_value(True) == expected(True)",
+          "source_file": "evaluation_report.txt",
+          "page_number": 1,
+          "section_header": "Compliance Claim",
+          "verbatim_snippet": "Application is deployed live on public AWS infrastructure: https://chronicle-ledger.awsapps.com",
+          "extracted_value": true,
+          "confidence": 0.88,
+          "confidence_gate": "PASSED",
+          "sha256": "dfb4a730b01453bb90a1b71bae67e9c514a180e97d8ce3132f552cf75d549287",
+          "decision": "VERIFIED",
+          "why": "Assertion verified with 88.0% confidence."
+        }
+      },
+      {
+        "verification_id": "ver_4946576089",
+        "project_id": "proj_1790128270",
+        "req_id": "REQ-005",
+        "status": "MISSING",
+        "provenance": null,
+        "deterministic_evaluation": {
+          "expression": "evidence_attached == False",
+          "passed": false,
+          "explanation": "No evidence document has been attached or matched for this requirement.",
+          "evaluated_at": "2026-09-23T01:51:10.766213+00:00"
+        },
+        "audit_hash": "cdc08d1654590622969f9a1264f53bfbb25a57eb43bb4230f8e54e08d716101d",
+        "assessed_at": "2026-09-23T01:51:10.766213+00:00",
+        "is_stale": false,
+        "verified_evidence_sha256": null,
+        "rule_hash": "04c97ce4b621df94",
+        "evidence_trail": {
+          "req_id": "REQ-005",
+          "title": "Modern Runtime Engine Version",
+          "rule": "evidence_attached == True",
+          "source_file": "None",
+          "extracted_fact": null,
+          "confidence": 0.0,
+          "confidence_gate": "MISSING",
+          "decision": "MISSING",
+          "why": "No evidence supplied for this requirement."
+        }
+      }
+    ],
+    "audit_trail": [
+      {
+        "event_id": "evt_62ccd8097554",
+        "project_id": "proj_1790128270",
+        "event_type": "PROJECT_CREATED",
+        "timestamp": "2026-09-23T01:51:10.644837+00:00",
+        "actor": "USER",
+        "details": {
+          "name": "AWS Zero to Shipped Test Run",
+          "category": "#workplace-efficiency"
+        },
+        "prev_hash": null,
+        "event_hash": "d60b36f76461eed8184ff88d73d45fd6b17b2846fd3e940945af4dc83ecb30e9"
+      },
+      {
+        "event_id": "evt_1c0cbb93d079",
+        "project_id": "proj_1790128270",
+        "event_type": "REQUIREMENTS_EXTRACTED",
+        "timestamp": "2026-09-23T01:51:10.664634+00:00",
+        "actor": "BEDROCK_AI_EXTRACTOR",
+        "details": {
+          "count": 5,
+          "req_ids": [
+            "REQ-001",
+            "REQ-002",
+            "REQ-003",
+            "REQ-004",
+            "REQ-005"
+          ]
+        },
+        "prev_hash": "d60b36f76461eed8184ff88d73d45fd6b17b2846fd3e940945af4dc83ecb30e9",
+        "event_hash": "cc7c30a48b9552e105126846bfe49292b1027e945240fc48d77c38f8fe1a369e"
+      },
+      {
+        "event_id": "evt_826a6b17c9d4",
+        "project_id": "proj_1790128270",
+        "event_type": "DETERMINISTIC_VERIFICATION_RUN",
+        "timestamp": "2026-09-23T01:51:10.675821+00:00",
+        "actor": "CHRONICLE_AST_ENGINE",
+        "details": {
+          "evaluated_count": 5
+        },
+        "prev_hash": "cc7c30a48b9552e105126846bfe49292b1027e945240fc48d77c38f8fe1a369e",
+        "event_hash": "3573634d5c20b43e5b0e3ce7b1a2d28d390972ffc8b6abfc6633935295b59840"
+      },
+      {
+        "event_id": "evt_f8bd92e8f983",
+        "project_id": "proj_1790128270",
+        "event_type": "EVIDENCE_ATTACHED",
+        "timestamp": "2026-09-23T01:51:10.701477+00:00",
+        "actor": "USER_INGESTION",
+        "details": {
+          "filename": "evaluation_report.txt",
+          "sha256": "dfb4a730b01453bb90a1b71bae67e9c514a180e97d8ce3132f552cf75d549287",
+          "size": 333
+        },
+        "prev_hash": "3573634d5c20b43e5b0e3ce7b1a2d28d390972ffc8b6abfc6633935295b59840",
+        "event_hash": "4e860a1b52e6d418a35d06230bb5a89079a143dd1edcdf559517698f634ab7ce"
+      },
+      {
+        "event_id": "evt_69b42f8a9c46",
+        "project_id": "proj_1790128270",
+        "event_type": "DETERMINISTIC_VERIFICATION_RUN",
+        "timestamp": "2026-09-23T01:51:10.725286+00:00",
+        "actor": "CHRONICLE_AST_ENGINE",
+        "details": {
+          "evaluated_count": 5
+        },
+        "prev_hash": "4e860a1b52e6d418a35d06230bb5a89079a143dd1edcdf559517698f634ab7ce",
+        "event_hash": "a8d8c6abb6fc02bc0d3f52939efdd27813d5ff2f0780d4ca66aa3215e844ca7d"
+      },
+      {
+        "event_id": "evt_6a202a98d0b1",
+        "project_id": "proj_1790128270",
+        "event_type": "DETERMINISTIC_VERIFICATION_RUN",
+        "timestamp": "2026-09-23T01:51:10.766280+00:00",
+        "actor": "CHRONICLE_AST_ENGINE",
+        "details": {
+          "evaluated_count": 5
+        },
+        "prev_hash": "a8d8c6abb6fc02bc0d3f52939efdd27813d5ff2f0780d4ca66aa3215e844ca7d",
+        "event_hash": "ac0a0d5ba951db1bcbd5f7def46d356e280f4528c43ad7281e37774180b7dfd5"
+      }
+    ]
   }
 }

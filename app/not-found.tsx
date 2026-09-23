@@ -1,20 +1,15 @@
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { ChronicleLogo } from '@/components/chronicle-logo';
-import { ArrowLeft, Home, Compass } from 'lucide-react';
+import { Home, Compass } from 'lucide-react';
 
 export default function NotFound() {
-  const router = useRouter();
-
   return (
     <div className="min-h-screen bg-[#FBFBFA] text-[#111111] flex flex-col justify-between p-6 sm:p-12 font-sans selection:bg-[#111111] selection:text-white">
       {/* Top Header */}
       <header className="flex items-center justify-between max-w-4xl mx-auto w-full">
         <Link href="/" className="flex items-center gap-2.5 group">
-          <ChronicleLogo className="w-6 h-6 text-[#111111] group-hover:scale-105 transition-transform" />
+          <ChronicleLogo size={24} className="group-hover:scale-105 transition-transform" />
           <span className="font-semibold text-sm tracking-tight text-[#111111]">
             Chronicle Ledger
           </span>
@@ -51,13 +46,6 @@ export default function NotFound() {
             <Home className="w-4 h-4" />
             <span>Go to Dashboard</span>
           </Link>
-          <button
-            onClick={() => router.back()}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-[#DDDDDD] bg-white hover:bg-[#F5F5F5] text-xs text-[#111111] font-semibold transition-colors cursor-pointer"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Go Back</span>
-          </button>
         </div>
 
         {/* Reference ID */}
