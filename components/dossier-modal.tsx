@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { X, Download, Copy, Check, ShieldCheck } from 'lucide-react';
+import { X, Download, Copy, Check, ShieldCheck, Edit3 } from 'lucide-react';
 
 interface DossierModalProps {
   isOpen: boolean;
   onClose: () => void;
   dossier: any;
   loading: boolean;
+  onOpenInContentStudio?: (content: string) => void;
 }
 
 export const DossierModal: React.FC<DossierModalProps> = ({
@@ -13,6 +14,7 @@ export const DossierModal: React.FC<DossierModalProps> = ({
   onClose,
   dossier,
   loading,
+  onOpenInContentStudio,
 }) => {
   const [copied, setCopied] = useState(false);
 
@@ -87,6 +89,19 @@ export const DossierModal: React.FC<DossierModalProps> = ({
             AWS Builder Center — Zero to Shipped 2026
           </span>
           <div className="flex items-center gap-2">
+            {onOpenInContentStudio && (
+              <button
+                onClick={() => {
+                  const content = dossier?.markdown_content || JSON.stringify(dossier, null, 2);
+                  onOpenInContentStudio(content);
+                  onClose();
+                }}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-indigo-200 bg-indigo-50 text-indigo-900 hover:bg-indigo-100 text-xs font-semibold cursor-pointer"
+              >
+                <Edit3 className="w-3.5 h-3.5 text-indigo-700" />
+                <span>Edit in Content Studio</span>
+              </button>
+            )}
             <button
               onClick={handleCopy}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-[#DDDDDD] text-xs font-medium text-[#444444] hover:text-[#111111] hover:bg-white cursor-pointer"

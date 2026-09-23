@@ -30,11 +30,19 @@
       "step_number": 19,
       "action": "Updated README.md to reflect user-first supporting material model and complete project architecture",
       "finding": "Rewrote README.md with the UX Principle ('Never make the user prove that they are a detective'), 4-stage pipeline (Source Material -> Extraction -> Check -> Result), full project directory structure including rule_parser.py and custom error views, and updated testing suite to 18 test cases."
+    },
+    {
+      "step_number": 20,
+      "action": "Implemented Content Studio post & article preparation workspace with rich WYSIWYG editing, multi-target export, and contextual AI selection rewrite",
+      "finding": "Created components/content-studio-modal.tsx and app/api/content-studio/rewrite/route.ts. Implemented direct formatting (Bold, Italic, Headings, Lists, Quotes, Code, Emojis, Undo/Redo, Find/Replace), targets (LinkedIn with 3000-char counter and hashtag tracker, Website/Blog, Markdown, HTML, Plain Text), dual preservation (original AI draft retained + version history ledger), contextual AI selection actions (Improve, Shorten, Expand, Technical, Grammar, Translate), and integrated into DevLog, reflection turns, top action bar, and verification dossier export. All 18 pytest tests and Next.js 15 production build pass cleanly."
     }
   ],
   "active_files": [
-    "README.md",
+    "components/content-studio-modal.tsx",
+    "app/api/content-studio/rewrite/route.ts",
+    "components/journal-dashboard.tsx",
+    "components/dossier-modal.tsx",
     ".agent_journal.json"
   ],
-  "next_step": "Commit and push README updates to GitHub repository"
+  "next_step": "Commit and push Content Studio feature to GitHub repository"
 }

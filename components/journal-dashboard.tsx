@@ -47,12 +47,14 @@ import {
   Cpu,
   Upload,
   WifiOff,
+  Edit3,
 } from 'lucide-react';
 import { RequirementModal } from '@/components/requirement-modal';
 import { EvidenceModal } from '@/components/evidence-modal';
 import { DossierModal } from '@/components/dossier-modal';
 import { TelemetryModal } from '@/components/telemetry-modal';
 import { RuleLabModal } from '@/components/rule-lab-modal';
+import { ContentStudioModal, type PublishingTarget } from '@/components/content-studio-modal';
 import { ProductErrorView, type ProductErrorKind } from '@/components/product-error-view';
 import { ChronicleErrorBoundary } from '@/components/error-boundary';
 import type { Project, TelemetrySummary, Requirement, VerificationRecord } from '@/lib/verification-types';
@@ -380,6 +382,10 @@ export function JournalDashboard() {
   const [showDossierModal, setShowDossierModal] = useState(false);
   const [showTelemetryModal, setShowTelemetryModal] = useState(false);
   const [showRuleLabModal, setShowRuleLabModal] = useState(false);
+  const [showContentStudio, setShowContentStudio] = useState(false);
+  const [contentStudioInitialContent, setContentStudioInitialContent] = useState('');
+  const [contentStudioInitialTitle, setContentStudioInitialTitle] = useState('Chronicle Ledger Technical Update');
+  const [contentStudioInitialTarget, setContentStudioInitialTarget] = useState<PublishingTarget>('linkedin');
   const [expandedTrailReqId, setExpandedTrailReqId] = useState<string | null>(null);
   const [showFormulaBreakdown, setShowFormulaBreakdown] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -1400,6 +1406,19 @@ export function JournalDashboard() {
                             <Cpu className="w-3.5 h-3.5 text-purple-700" />
                             <span>Rule Test Lab</span>
                           </button>
+                          <button
+                            onClick={() => {
+                              setContentStudioInitialContent('<p>We shipped Chronicle Ledger v2 on AWS using Lambda, Bedrock, and DynamoDB.</p>');
+                              setContentStudioInitialTitle(activeInteraction?.title || 'AWS Zero to Shipped Update');
+                              setContentStudioInitialTarget('linkedin');
+                              setShowContentStudio(true);
+                            }}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-indigo-200 bg-indigo-50/60 hover:bg-indigo-100/80 text-indigo-900 text-xs font-semibold transition-colors cursor-pointer shadow-2xs"
+                            title="Open Content Studio to format, edit, and export publication-ready posts"
+                          >
+                            <Edit3 className="w-3.5 h-3.5 text-indigo-700" />
+                            <span>Content Studio</span>
+                          </button>
                         </div>
 
                         <div className="flex items-center gap-2">
@@ -2001,21 +2020,51 @@ export function JournalDashboard() {
                                     <Share2 className="w-3.5 h-3.5 text-[#0A66C2]" />
                                     <span>LinkedIn Optimized Update</span>
                                   </div>
-                                  <button
-                                    onClick={() => handleCopyTurn(turn.id, turn.dualResponse!.linkedin_optimized_post!)}
-                                    className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl sm:rounded-full bg-[#111111] text-white hover:bg-black font-medium text-xs transition-colors cursor-pointer shadow-2xs active:scale-[0.99]"
-                                  >
-                                    {copiedId === turn.id ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                                    <span>{copiedId === turn.id ? 'Copied' : 'Copy Post'}</span>
-                                  </button>
+                                  <div className="flex items-center gap-2">
+                                    <button
+                                      onClick={() => {
+                                        setContentStudioInitialContent(turn.dualResponse!.linkedin_optimized_post!);
+                                        setContentStudioInitialTitle(activeInteraction?.title || 'DevLog Update');
+                                        setContentStudioInitialTarget('linkedin');
+                                        setShowContentStudio(true);
+                                      }}
+                                      className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl sm:rounded-full bg-[#111111] text-white hover:bg-black font-semibold text-xs transition-colors cursor-pointer shadow-2xs"
+                                    >
+                                      <Edit3 className="w-3.5 h-3.5 text-amber-300" />
+                                      <span>Open in Content Studio</span>
+                                    </button>
+                                    <button
+                                      onClick={() => handleCopyTurn(turn.id, turn.dualResponse!.linkedin_optimized_post!)}
+                                      className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl sm:rounded-full border border-[#DDDDDD] bg-white hover:bg-[#F5F5F5] font-medium text-xs text-[#111111] transition-colors cursor-pointer"
+                                    >
+                                      {copiedId === turn.id ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                                      <span>{copiedId === turn.id ? 'Copied' : 'Quick Copy'}</span>
+                                    </button>
+                                  </div>
                                 </div>
                                 <div className="prose prose-neutral prose-xs sm:prose-sm md:prose-base max-w-none text-[#111111] leading-relaxed whitespace-pre-wrap">
                                   {turn.dualResponse.linkedin_optimized_post}
                                 </div>
                               </div>
                             ) : (
-                              <div className="prose prose-neutral prose-xs sm:prose-sm md:prose-base max-w-none text-[#111111] leading-relaxed">
-                                <Markdown>{turn.text}</Markdown>
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-end">
+                                  <button
+                                    onClick={() => {
+                                      setContentStudioInitialContent(turn.text);
+                                      setContentStudioInitialTitle(activeInteraction?.title || 'Reflection Note');
+                                      setContentStudioInitialTarget('website');
+                                      setShowContentStudio(true);
+                                    }}
+                                    className="inline-flex items-center gap-1 text-[11px] font-medium text-[#666666] hover:text-[#111111] cursor-pointer"
+                                  >
+                                    <Edit3 className="w-3 h-3 text-[#111111]" />
+                                    <span>Edit in Content Studio</span>
+                                  </button>
+                                </div>
+                                <div className="prose prose-neutral prose-xs sm:prose-sm md:prose-base max-w-none text-[#111111] leading-relaxed">
+                                  <Markdown>{turn.text}</Markdown>
+                                </div>
                               </div>
                             )}
 
@@ -2245,6 +2294,12 @@ export function JournalDashboard() {
         dossier={dossierData}
         onClose={() => setShowDossierModal(false)}
         loading={false}
+        onOpenInContentStudio={(content) => {
+          setContentStudioInitialContent(content);
+          setContentStudioInitialTitle('Chronicle Ledger Verification Report');
+          setContentStudioInitialTarget('markdown');
+          setShowContentStudio(true);
+        }}
       />
 
       <TelemetryModal
@@ -2257,6 +2312,15 @@ export function JournalDashboard() {
         isOpen={showRuleLabModal}
         onClose={() => setShowRuleLabModal(false)}
         apiBase="http://localhost:8000"
+      />
+
+      <ContentStudioModal
+        isOpen={showContentStudio}
+        onClose={() => setShowContentStudio(false)}
+        initialContent={contentStudioInitialContent}
+        initialTitle={contentStudioInitialTitle}
+        initialTarget={contentStudioInitialTarget}
+        authorName={user?.displayName || 'Chronicle Builder'}
       />
 
       {/* Product-Specific Error Modal Overlay */}
