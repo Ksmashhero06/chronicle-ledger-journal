@@ -36,20 +36,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Safety fallback timeout: if Firebase auth hangs or is network blocked, unblock after 2 seconds
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
     const unsubscribe = onAuthStateChanged(
       auth,
       (currentUser) => {
+        clearTimeout(timeout);
         setUser(currentUser);
         setLoading(false);
       },
       (err) => {
+        clearTimeout(timeout);
         console.error('Firebase Auth state error:', err);
         setError(err.message);
         setLoading(false);
       }
     );
 
-    return () => unsubscribe();
+    return () => {
+      clearTimeout(timeout);
+      unsubscribe();
+    };
   }, []);
 
   const signInWithGoogle = async () => {
