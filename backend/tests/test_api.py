@@ -130,3 +130,25 @@ def test_rule_test_lab_api():
     assert data["results"][1]["actual"] == "FALSE"
     assert data["results"][2]["actual"] == "INSUFFICIENT"
 
+
+def test_structured_error_responses():
+    # 1. 404 Project Not Found
+    res = client.get("/api/projects/proj_non_existent_12345")
+    assert res.status_code == 404
+    data = res.json()
+    assert "error" in data
+    assert data["error"]["code"] == "PROJECT_NOT_FOUND"
+    assert data["error"]["request_id"].startswith("CL-")
+    assert "X-Request-Id" in res.headers
+
+    # 2. 413 File Too Large
+    res_large = client.post("/api/projects/proj_aws_zero_to_shipped_2026/upload-evidence", json={
+        "filename": "huge_dump.txt",
+        "file_type": "text/plain",
+        "content_text": "A" * (6 * 1024 * 1024)  # 6MB exceeds 5MB limit
+    })
+    assert res_large.status_code == 413
+    data_large = res_large.json()
+    assert data_large["error"]["code"] == "FILE_TOO_LARGE"
+    assert data_large["error"]["request_id"].startswith("CL-")
+

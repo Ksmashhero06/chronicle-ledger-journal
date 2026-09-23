@@ -46,12 +46,15 @@ import {
   ChevronUp,
   Cpu,
   Upload,
+  WifiOff,
 } from 'lucide-react';
 import { RequirementModal } from '@/components/requirement-modal';
 import { EvidenceModal } from '@/components/evidence-modal';
 import { DossierModal } from '@/components/dossier-modal';
 import { TelemetryModal } from '@/components/telemetry-modal';
 import { RuleLabModal } from '@/components/rule-lab-modal';
+import { ProductErrorView, type ProductErrorKind } from '@/components/product-error-view';
+import { ChronicleErrorBoundary } from '@/components/error-boundary';
 import type { Project, TelemetrySummary, Requirement, VerificationRecord } from '@/lib/verification-types';
 import * as verifApi from '@/lib/verification-api';
 
@@ -382,9 +385,30 @@ export function JournalDashboard() {
   const [isVerifying, setIsVerifying] = useState(false);
   const [dossierData, setDossierData] = useState<any>(null);
   const [telemetryData, setTelemetryData] = useState<TelemetrySummary | null>(null);
+  const [isOffline, setIsOffline] = useState(false);
+  const [activeError, setActiveError] = useState<{
+    kind: ProductErrorKind;
+    details?: string;
+    refId?: string;
+  } | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Network offline listener
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+    if (typeof window !== 'undefined') {
+      setIsOffline(!navigator.onLine);
+      window.addEventListener('online', handleOnline);
+      window.addEventListener('offline', handleOffline);
+    }
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   // Load project verification data
   useEffect(() => {
@@ -403,6 +427,15 @@ export function JournalDashboard() {
   }, []);
 
   const handleRunVerification = async () => {
+    if (typeof navigator !== 'undefined' && !navigator.onLine) {
+      setActiveError({
+        kind: 'OFFLINE',
+        details: 'Device network offline. Verification requires an active network connection.',
+        refId: 'CL-NET01',
+      });
+      return;
+    }
+
     setIsVerifying(true);
     try {
       const pid = project?.project_id || 'proj_aws_zero_to_shipped_2026';
@@ -410,6 +443,19 @@ export function JournalDashboard() {
       setProject(updated);
     } catch (err: any) {
       console.warn('Backend runVerification error, applying resilient local verification state:', err);
+      if (err.message && err.message.includes('413')) {
+        setActiveError({
+          kind: 'FILE_TOO_LARGE',
+          details: 'Uploaded payload exceeded maximum 5MB size limit.',
+          refId: 'CL-ERR413',
+        });
+      } else if (err.message && (err.message.includes('504') || err.message.includes('timeout'))) {
+        setActiveError({
+          kind: '504_TIMEOUT',
+          details: err.message,
+          refId: 'CL-ERR504',
+        });
+      }
       if (project) {
         setProject({
           ...project,
@@ -1047,8 +1093,9 @@ export function JournalDashboard() {
   );
 
   return (
-    <div className="h-screen flex flex-col bg-[#FDFDFD] text-[#1A1A1A] font-sans overflow-hidden">
-      {/* Top Application Header */}
+    <ChronicleErrorBoundary>
+      <div className="h-screen flex flex-col bg-[#FDFDFD] text-[#1A1A1A] font-sans overflow-hidden">
+        {/* Top Application Header */}
       <header className="h-16 sm:h-18 border-b border-[#F0F0F0] bg-white px-3 sm:px-6 lg:px-8 flex items-center justify-between shrink-0 z-20">
         <div className="flex items-center space-x-2 sm:space-x-4 min-w-0">
           {/* Mobile History Drawer Toggle */}
@@ -1123,6 +1170,22 @@ export function JournalDashboard() {
           </div>
         </div>
       </header>
+
+      {/* Offline Alert Notification */}
+      {isOffline && (
+        <div className="bg-[#111111] text-white px-4 py-2 text-xs flex items-center justify-between gap-3 font-sans shrink-0 border-b border-stone-800 animate-in fade-in duration-100">
+          <div className="flex items-center gap-2">
+            <WifiOff className="w-4 h-4 text-amber-400 shrink-0" />
+            <span>You&apos;re offline. Your existing project records are safe, but running new verifications requires an active internet connection.</span>
+          </div>
+          <button
+            onClick={() => setIsOffline(typeof navigator !== 'undefined' ? !navigator.onLine : false)}
+            className="px-2.5 py-1 rounded bg-white text-[#111111] font-semibold hover:bg-stone-100 text-[11px] cursor-pointer shrink-0"
+          >
+            Retry Connection
+          </button>
+        </div>
+      )}
 
       {/* Main Dynamic Grid Layout */}
       <div className="flex-1 w-full overflow-hidden p-2 sm:p-4 lg:p-6 bg-[#FAFAFA]">
@@ -2151,9 +2214,26 @@ export function JournalDashboard() {
         isOpen={showEviModal}
         onClose={() => setShowEviModal(false)}
         onSubmit={async (fn, ft, ct) => {
+          if (ct.length > 5 * 1024 * 1024) {
+            setActiveError({
+              kind: 'FILE_TOO_LARGE',
+              details: `File size exceeds 5MB limit (${(ct.length / (1024 * 1024)).toFixed(1)}MB).`,
+              refId: 'CL-UP413',
+            });
+            setShowEviModal(false);
+            return;
+          }
           if (project) {
-            const updated = await verifApi.uploadEvidence(project.project_id, fn, ft, ct);
-            setProject(updated);
+            try {
+              const updated = await verifApi.uploadEvidence(project.project_id, fn, ft, ct);
+              setProject(updated);
+            } catch (err: any) {
+              setActiveError({
+                kind: 'FILE_CORRUPT',
+                details: err.message || 'Evidence ingestion or hashing failed.',
+                refId: 'CL-UPERR',
+              });
+            }
           }
           setShowEviModal(false);
         }}
@@ -2178,6 +2258,24 @@ export function JournalDashboard() {
         onClose={() => setShowRuleLabModal(false)}
         apiBase="http://localhost:8000"
       />
+
+      {/* Product-Specific Error Modal Overlay */}
+      {activeError && (
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <ProductErrorView
+            kind={activeError.kind}
+            referenceId={activeError.refId}
+            technicalDetails={activeError.details}
+            onRetry={() => {
+              setActiveError(null);
+              handleRunVerification();
+            }}
+            onDismiss={() => setActiveError(null)}
+            onGoHome={() => setActiveError(null)}
+          />
+        </div>
+      )}
     </div>
+    </ChronicleErrorBoundary>
   );
 }

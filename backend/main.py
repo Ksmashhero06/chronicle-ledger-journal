@@ -6,8 +6,10 @@ Evidence-Grounded Requirement Verification & Submission Readiness Platform.
 import os
 import datetime
 import hashlib
+import secrets
 from typing import Any, Dict, List, Optional
-from fastapi import FastAPI, HTTPException, Body
+from fastapi import FastAPI, HTTPException, Body, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -42,6 +44,86 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def correlation_id_middleware(request: Request, call_next):
+    req_id = request.headers.get("X-Request-Id") or f"CL-{secrets.token_hex(3).upper()}"
+    request.state.request_id = req_id
+    response = await call_next(request)
+    response.headers["X-Request-Id"] = req_id
+    return response
+
+
+class ChronicleApiException(HTTPException):
+    def __init__(self, status_code: int, code: str, message: str, details: Optional[str] = None):
+        super().__init__(status_code=status_code, detail=message)
+        self.code = code
+        self.details = details
+
+
+@app.exception_handler(ChronicleApiException)
+async def chronicle_api_exception_handler(request: Request, exc: ChronicleApiException):
+    req_id = getattr(request.state, "request_id", f"CL-{secrets.token_hex(3).upper()}")
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "error": {
+                "code": exc.code,
+                "message": exc.detail,
+                "request_id": req_id,
+                "details": exc.details,
+            }
+        },
+        headers={"X-Request-Id": req_id},
+    )
+
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    req_id = getattr(request.state, "request_id", f"CL-{secrets.token_hex(3).upper()}")
+    code_map = {
+        400: "INVALID_REQUEST",
+        401: "AUTH_REQUIRED",
+        403: "ACCESS_DENIED",
+        404: "PROJECT_NOT_FOUND",
+        413: "FILE_TOO_LARGE",
+        422: "INVALID_REQUEST",
+        429: "RATE_LIMITED",
+        500: "INTERNAL_ERROR",
+        502: "DEPENDENCY_UNAVAILABLE",
+        503: "DEPENDENCY_UNAVAILABLE",
+        504: "DEPENDENCY_UNAVAILABLE",
+    }
+    code = code_map.get(exc.status_code, "APPLICATION_ERROR")
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "error": {
+                "code": code,
+                "message": str(exc.detail),
+                "request_id": req_id,
+            }
+        },
+        headers={"X-Request-Id": req_id},
+    )
+
+
+@app.exception_handler(Exception)
+async def unhandled_exception_handler(request: Request, exc: Exception):
+    req_id = getattr(request.state, "request_id", f"CL-{secrets.token_hex(3).upper()}")
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": {
+                "code": "INTERNAL_ERROR",
+                "message": "Something went wrong while processing your request. Your project records are safe.",
+                "request_id": req_id,
+                "details": exc.__class__.__name__,
+            }
+        },
+        headers={"X-Request-Id": req_id},
+    )
 
 
 class RuleTestLabRequest(BaseModel):

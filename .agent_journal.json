@@ -17,15 +17,20 @@
       "finding": "Implemented evidence normalization layer, confidence gate (< 0.75 routed to NEEDS_REVIEW), evidence trail explainability dict, stale detection in storage, test-rule lab endpoint, and explainable weighted readiness scoring. All 17 tests in test_api, test_evaluator, and test_parser pass."
     },
     {
-      "step_number": 16,
-      "action": "Applied mandatory user-centric UI design rules and progressive disclosure to Chronicle Ledger v2 interface",
-      "finding": "Created .agents/rules/ui_user_perspective.md encoding the user-first design mandate. Refactored components/journal-dashboard.tsx so user goals, clear status badges (Verified, Needs Review, Missing Evidence, Evidence Changed), plain-English explanations, and direct next action buttons appear first, while technical AST/SHA-256 traces are progressively disclosed behind 'How was this checked?'. Verified with passing Next.js production build and 17/17 pytest tests."
+      "step_number": 17,
+      "action": "Implemented complete custom error handling system, 404/500 pages, API correlation ID middleware, and React error boundary",
+      "finding": "Created app/not-found.tsx, app/error.tsx, components/product-error-view.tsx, and components/error-boundary.tsx. Added request correlation ID middleware ('CL-XXXXXX') and structured JSON exception handlers in backend/main.py. Integrated offline detection banner and upload size limits in journal-dashboard.tsx. All 18 pytest tests and Next.js production build pass."
     }
   ],
   "active_files": [
-    ".agents/rules/ui_user_perspective.md",
+    "app/not-found.tsx",
+    "app/error.tsx",
+    "components/product-error-view.tsx",
+    "components/error-boundary.tsx",
+    "backend/main.py",
+    "backend/tests/test_api.py",
     "components/journal-dashboard.tsx",
     ".agent_journal.json"
   ],
-  "next_step": "Commit and push user-centric UI enhancements to GitHub repository"
+  "next_step": "Commit and push custom error system enhancements to GitHub repository"
 }
