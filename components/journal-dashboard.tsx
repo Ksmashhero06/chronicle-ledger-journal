@@ -1281,28 +1281,26 @@ export function JournalDashboard() {
                               AWS Zero to Shipped 2026 • #workplace-efficiency
                             </span>
                             <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-mono font-semibold">
-                              Deterministic Engine Active
+                              Automated Verification Active
                             </span>
                           </div>
                           <h2 className="text-lg sm:text-xl font-semibold text-[#111111] tracking-tight mt-1">
                             Chronicle Ledger
                           </h2>
                           <p className="text-xs text-[#666666]">
-                            Verify your requirements. Track your evidence. Know what&apos;s ready.
+                            Verify your project requirements against real documents, code, and test logs.
                           </p>
                         </div>
 
                         {/* Progression Stepper */}
                         <div className="flex items-center gap-1.5 text-[10px] font-mono bg-[#FAFAFA] p-2 rounded-xl border border-[#EEEEEE] text-[#666666]">
-                          <span className="font-semibold text-[#111111]">Project</span>
+                          <span className="font-semibold text-[#111111]">1. Rules</span>
                           <span className="text-[#CCCCCC]">→</span>
-                          <span className="font-semibold text-[#111111]">Rules</span>
+                          <span className="font-semibold text-[#111111]">2. Evidence</span>
                           <span className="text-[#CCCCCC]">→</span>
-                          <span className="font-semibold text-[#111111]">Evidence</span>
+                          <span className="font-semibold text-[#111111]">3. Verify</span>
                           <span className="text-[#CCCCCC]">→</span>
-                          <span className="font-semibold text-[#111111]">Verify</span>
-                          <span className="text-[#CCCCCC]">→</span>
-                          <span className="font-bold text-emerald-600">Readiness</span>
+                          <span className="font-bold text-emerald-600">4. Readiness</span>
                         </div>
                       </div>
 
@@ -1314,7 +1312,7 @@ export function JournalDashboard() {
                             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#DDDDDD] bg-white hover:bg-[#F5F5F5] text-xs text-[#111111] font-medium transition-colors cursor-pointer shadow-2xs"
                           >
                             <FileText className="w-3.5 h-3.5 text-[#666666]" />
-                            <span>+ Add Rules</span>
+                            <span>+ Add Requirements</span>
                           </button>
                           <button
                             onClick={() => setShowEviModal(true)}
@@ -1326,14 +1324,15 @@ export function JournalDashboard() {
                           <button
                             onClick={handleRunVerification}
                             disabled={isVerifying}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#111111] hover:bg-black text-white text-xs font-semibold transition-colors cursor-pointer shadow-2xs"
+                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#111111] hover:bg-black text-white text-xs font-semibold transition-colors cursor-pointer shadow-2xs"
                           >
                             <RotateCw className={`w-3.5 h-3.5 ${isVerifying ? 'animate-spin' : ''}`} />
-                            <span>{isVerifying ? 'Evaluating AST...' : 'Run Verification'}</span>
+                            <span>{isVerifying ? 'Checking Evidence...' : 'Run Verification'}</span>
                           </button>
                           <button
                             onClick={() => setShowRuleLabModal(true)}
                             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-purple-200 bg-purple-50/50 hover:bg-purple-100/70 text-purple-900 text-xs font-semibold transition-colors cursor-pointer shadow-2xs"
+                            title="Test custom rule logic with sample values"
                           >
                             <Cpu className="w-3.5 h-3.5 text-purple-700" />
                             <span>Rule Test Lab</span>
@@ -1376,7 +1375,7 @@ export function JournalDashboard() {
                               setShowTelemetryModal(true);
                             }}
                             className="p-1.5 rounded-lg border border-[#DDDDDD] hover:bg-[#F5F5F5] text-[#666666] hover:text-[#111111] transition-colors cursor-pointer"
-                            title="Agent Activity"
+                            title="View Activity & Latency"
                           >
                             <Cpu className="w-3.5 h-3.5" />
                           </button>
@@ -1386,12 +1385,12 @@ export function JournalDashboard() {
 
                     {/* Stale Warning Banner (if evidence changed) */}
                     {staleCount > 0 && (
-                      <div className="p-3.5 px-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 flex items-center justify-between gap-3 text-xs">
+                      <div className="p-3.5 px-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                         <div className="flex items-center gap-2">
                           <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
                           <div>
-                            <span className="font-semibold">Evidence updated: {staleCount} previous verification(s) are stale.</span>
-                            <p className="text-[11px] text-amber-700">Re-run deterministic evaluation to re-verify against newly attached evidence.</p>
+                            <span className="font-semibold block">Evidence updated: {staleCount} previous verification(s) need re-checking.</span>
+                            <p className="text-[11px] text-amber-700">A newly attached document may change your previous results.</p>
                           </div>
                         </div>
                         <button
@@ -1405,12 +1404,29 @@ export function JournalDashboard() {
                       </div>
                     )}
 
-                    {/* Explainable Weighted Readiness Gauge Card */}
+                    {/* Empty Evidence Guidance Banner */}
+                    {reqs.length > 0 && (!project?.evidence_files || project.evidence_files.length === 0) && (
+                      <div className="p-4 rounded-xl bg-blue-50/70 border border-blue-200 text-blue-900 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                        <div>
+                          <span className="font-semibold block">Requirements are ready to verify.</span>
+                          <p className="text-[11px] text-blue-700">Attach a test report, README, deployment log, or code file to verify your project.</p>
+                        </div>
+                        <button
+                          onClick={() => setShowEviModal(true)}
+                          className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs flex items-center gap-1.5 shrink-0 cursor-pointer shadow-xs"
+                        >
+                          <Upload className="w-3.5 h-3.5" />
+                          <span>+ Attach Evidence</span>
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Readiness Gauge Card */}
                     <div className="p-5 sm:p-6 bg-white rounded-2xl border border-[#EEEEEE] shadow-2xs space-y-4">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div className="space-y-1">
                           <span className="text-[10px] uppercase font-mono tracking-widest text-[#888888] font-bold">
-                            Submission Readiness Gauge
+                            Submission Readiness State
                           </span>
                           <div className="flex items-baseline gap-2.5">
                             <span className="text-3xl sm:text-4xl font-bold tracking-tight text-[#111111]">
@@ -1423,7 +1439,7 @@ export function JournalDashboard() {
                             </span>
                           </div>
                           <p className="text-xs text-[#666666]">
-                            Deterministic proof calculated across {reqs.length} rules using explainable category weighting.
+                            {verifiedCount} verified, {reviewCount} need review, and {missingCount > 0 ? missingCount : 0} missing evidence out of {reqs.length} total requirements.
                           </p>
                         </div>
 
@@ -1444,7 +1460,7 @@ export function JournalDashboard() {
                             onClick={() => setShowFormulaBreakdown(!showFormulaBreakdown)}
                             className="px-3 py-2 rounded-xl border border-[#DDDDDD] bg-white hover:bg-[#F5F5F5] text-xs font-medium text-[#111111] transition-colors cursor-pointer flex items-center gap-1.5"
                           >
-                            <span>Why this score?</span>
+                            <span>How is this calculated?</span>
                             {showFormulaBreakdown ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                           </button>
                         </div>
@@ -1454,208 +1470,297 @@ export function JournalDashboard() {
                       {showFormulaBreakdown && (
                         <div className="p-3.5 rounded-xl bg-[#F8F9FA] border border-[#E5E7EB] text-xs font-mono text-[#444444] space-y-2 animate-in fade-in duration-150">
                           <p className="font-semibold font-sans text-xs text-[#111111]">
-                            Explainable Weighted Scoring Formula:
+                            How Your Score is Calculated:
                           </p>
-                          <code className="block bg-white p-2 rounded-lg border border-[#E5E5E5] text-[11px] text-[#111111]">
-                            Readiness = (∑ [Severity Weight × Result Credit]) / (∑ Total Severity Weight) × 100%
-                          </code>
+                          <p className="text-[11px] font-sans text-[#666666]">
+                            Requirements are weighted by importance so critical blockers impact readiness the most:
+                          </p>
                           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px] font-sans">
                             <div className="p-2 rounded bg-white border border-[#EEEEEE]">
-                              <span className="font-bold text-rose-600 block">CRITICAL (Weight 3)</span>
-                              <p className="text-[#666666] text-[10px]">Eligibility, Accuracy, Public Deployment</p>
+                              <span className="font-bold text-rose-600 block">Critical (3x weight)</span>
+                              <p className="text-[#666666] text-[10px]">Eligibility, core benchmarks, public deployment</p>
                             </div>
                             <div className="p-2 rounded bg-white border border-[#EEEEEE]">
-                              <span className="font-bold text-amber-600 block">IMPORTANT (Weight 2)</span>
-                              <p className="text-[#666666] text-[10px]">Coding Agent Telemetry & Session Records</p>
+                              <span className="font-bold text-amber-600 block">Important (2x weight)</span>
+                              <p className="text-[#666666] text-[10px]">Telemetry, dev session logs, architecture traces</p>
                             </div>
                             <div className="p-2 rounded bg-white border border-[#EEEEEE]">
-                              <span className="font-bold text-blue-600 block">RECOMMENDED (Weight 1)</span>
-                              <p className="text-[#666666] text-[10px]">Open Source License & Architecture Docs</p>
+                              <span className="font-bold text-blue-600 block">Recommended (1x weight)</span>
+                              <p className="text-[#666666] text-[10px]">Open source license, README documentation</p>
                             </div>
                           </div>
-                          <p className="text-[10px] text-[#777777] italic font-sans pt-1">
-                            Verified = 1.0 credit • Needs Review (or Confidence &lt; 0.75) = 0.25 credit • Missing = 0.0 credit
+                          <p className="text-[10px] text-[#777777] font-sans pt-1">
+                            Verified = 100% credit • Needs Review = 25% partial credit • Missing = 0% credit.
                           </p>
                         </div>
                       )}
                     </div>
 
-                    {/* Requirements & Evidence Ledger Cards */}
+                    {/* Requirements & Evidence Checks */}
                     <div className="space-y-3">
                       <div className="flex items-center justify-between px-1">
                         <span className="text-xs font-bold font-mono uppercase tracking-wider text-[#888888]">
-                          Requirements & Evidence Trail ({reqs.length})
+                          Requirements ({reqs.length})
                         </span>
                         <span className="text-xs text-[#666666]">
-                          Click any requirement to view the full verification proof chain
+                          Review current results and inspect supporting evidence
                         </span>
                       </div>
 
-                      {reqs.map((req) => {
-                        const verif = vMap[req.req_id];
-                        const isVerified = verif?.status === 'VERIFIED';
-                        const isReview = verif?.status === 'NEEDS_REVIEW';
-                        const isMissing = !verif || verif.status === 'MISSING';
-                        const isStale = !!verif?.is_stale;
-                        const isExpanded = expandedTrailReqId === req.req_id;
-
-                        const confidence = verif?.provenance?.confidence || 0.94;
-                        const confidencePassed = confidence >= 0.75;
-                        const trail = verif?.evidence_trail;
-
-                        return (
-                          <div
-                            key={req.req_id}
-                            className={`rounded-2xl border transition-all ${
-                              isExpanded
-                                ? 'bg-white border-[#111111] shadow-sm'
-                                : 'bg-white border-[#EEEEEE] hover:border-[#CCCCCC]'
-                            }`}
+                      {reqs.length === 0 ? (
+                        <div className="p-10 bg-white rounded-2xl border border-dashed border-[#CCCCCC] text-center space-y-4">
+                          <div className="w-12 h-12 rounded-full bg-[#F5F5F5] flex items-center justify-center mx-auto text-[#666666]">
+                            <FileText className="w-6 h-6" />
+                          </div>
+                          <div className="max-w-md mx-auto space-y-1">
+                            <h3 className="text-base font-semibold text-[#111111]">No requirements added yet</h3>
+                            <p className="text-xs text-[#666666] leading-relaxed">
+                              Add your project requirements, and Chronicle Ledger will turn them into checks you can verify against your code, logs, and documents.
+                            </p>
+                          </div>
+                          <button
+                            onClick={() => setShowReqModal(true)}
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#111111] hover:bg-black text-white text-xs font-semibold cursor-pointer shadow-sm"
                           >
-                            <div className="p-4 sm:p-5 space-y-3">
-                              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-                                <div className="flex items-center gap-2 flex-wrap">
-                                  <span className="px-2 py-0.5 rounded-md bg-[#F0F0F0] text-[#111111] font-mono text-xs font-bold">
-                                    {req.req_id}
-                                  </span>
-                                  <span className="text-xs font-mono text-[#888888] uppercase">
-                                    {req.category}
-                                  </span>
-                                  <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
-                                    req.severity === 'CRITICAL'
-                                      ? 'bg-rose-50 text-rose-700 border border-rose-200'
-                                      : req.severity === 'IMPORTANT'
-                                      ? 'bg-amber-50 text-amber-700 border border-amber-200'
-                                      : 'bg-blue-50 text-blue-700 border border-blue-200'
-                                  }`}>
-                                    {req.severity} (Weight {req.severity === 'CRITICAL' ? 3 : req.severity === 'IMPORTANT' ? 2 : 1})
-                                  </span>
-                                </div>
+                            <Plus className="w-4 h-4" />
+                            <span>Add Requirements</span>
+                          </button>
+                        </div>
+                      ) : (
+                        reqs.map((req) => {
+                          const verif = vMap[req.req_id];
+                          const isVerified = verif?.status === 'VERIFIED';
+                          const isReview = verif?.status === 'NEEDS_REVIEW';
+                          const isMissing = !verif || verif.status === 'MISSING';
+                          const isStale = !!verif?.is_stale;
+                          const isExpanded = expandedTrailReqId === req.req_id;
 
-                                <div className="flex items-center gap-2">
-                                  {isStale && (
-                                    <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-mono font-bold flex items-center gap-1">
-                                      <AlertTriangle className="w-3 h-3 text-amber-600" />
-                                      STALE
+                          const confidence = verif?.provenance?.confidence || 0.94;
+                          const trail = verif?.evidence_trail;
+                          const evidenceFile = verif?.provenance?.evidence_file || trail?.source_file;
+                          const verbatimSnippet = verif?.provenance?.verbatim_snippet || trail?.verbatim_snippet;
+
+                          // Human-first result explanation
+                          let resultExplanation = '';
+                          if (isVerified) {
+                            resultExplanation = verif?.deterministic_evaluation?.explanation || trail?.why || 'Requirement verified against evidence.';
+                          } else if (isReview) {
+                            resultExplanation = 'Needs Review: The AI extracted this value with lower confidence. Please check the quoted text.';
+                          } else if (isStale) {
+                            resultExplanation = 'Out of date: A new evidence file was uploaded since this requirement was checked.';
+                          } else {
+                            resultExplanation = 'Missing evidence: No uploaded document or log matches this requirement yet.';
+                          }
+
+                          return (
+                            <div
+                              key={req.req_id}
+                              className={`rounded-2xl border transition-all ${
+                                isExpanded
+                                  ? 'bg-white border-[#111111] shadow-sm'
+                                  : 'bg-white border-[#EEEEEE] hover:border-[#CCCCCC]'
+                              }`}
+                            >
+                              <div className="p-4 sm:p-5 space-y-3.5">
+                                {/* 1. What is the requirement & Current Result */}
+                                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2.5">
+                                  <div className="space-y-1">
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                      <span className="px-2 py-0.5 rounded-md bg-[#F0F0F0] text-[#111111] font-mono text-xs font-bold">
+                                        {req.req_id}
+                                      </span>
+                                      <span className="text-xs font-mono text-[#888888] uppercase">
+                                        {req.category}
+                                      </span>
+                                      <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                                        req.severity === 'CRITICAL'
+                                          ? 'bg-rose-50 text-rose-700 border border-rose-200'
+                                          : req.severity === 'IMPORTANT'
+                                          ? 'bg-amber-50 text-amber-700 border border-amber-200'
+                                          : 'bg-blue-50 text-blue-700 border border-blue-200'
+                                      }`}>
+                                        {req.severity === 'CRITICAL' ? 'Critical' : req.severity === 'IMPORTANT' ? 'Important' : 'Recommended'}
+                                      </span>
+                                    </div>
+                                    <h3 className="text-sm font-semibold text-[#111111]">
+                                      {req.title}
+                                    </h3>
+                                    <p className="text-xs text-[#666666] leading-relaxed">
+                                      {req.description}
+                                    </p>
+                                  </div>
+
+                                  {/* Result Badge */}
+                                  <div className="flex items-center gap-2 shrink-0">
+                                    {isStale && (
+                                      <span className="px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-medium flex items-center gap-1.5">
+                                        <AlertTriangle className="w-3.5 h-3.5 text-amber-700" />
+                                        Evidence Changed
+                                      </span>
+                                    )}
+                                    <span className={`px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1.5 ${
+                                      isVerified
+                                        ? 'bg-emerald-100 text-emerald-900'
+                                        : isReview
+                                        ? 'bg-amber-100 text-amber-900'
+                                        : 'bg-gray-100 text-gray-700'
+                                    }`}>
+                                      {isVerified && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />}
+                                      {isReview && <AlertCircle className="w-3.5 h-3.5 text-amber-600" />}
+                                      {isMissing && <span className="w-2 h-2 rounded-full bg-gray-400" />}
+                                      {isVerified ? 'Verified' : isReview ? 'Needs Review' : 'Missing Evidence'}
                                     </span>
-                                  )}
-                                  <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold flex items-center gap-1 ${
-                                    isVerified
-                                      ? 'bg-emerald-100 text-emerald-800'
-                                      : isReview
-                                      ? 'bg-amber-100 text-amber-800'
-                                      : 'bg-gray-100 text-gray-700'
-                                  }`}>
-                                    {isVerified && <CheckCircle2 className="w-3 h-3 text-emerald-600" />}
-                                    {isReview && <AlertCircle className="w-3 h-3 text-amber-600" />}
-                                    {isMissing && <span className="w-2 h-2 rounded-full bg-gray-400" />}
-                                    {verif?.status || 'MISSING'}
-                                  </span>
-                                </div>
-                              </div>
-
-                              <div>
-                                <h3 className="text-sm font-semibold text-[#111111]">
-                                  {req.title}
-                                </h3>
-                                <p className="text-xs text-[#666666] mt-0.5 leading-relaxed">
-                                  {req.description}
-                                </p>
-                              </div>
-
-                              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-[#F5F5F5]">
-                                <div className="flex items-center gap-2 font-mono text-[11px] text-[#555555]">
-                                  <span className="text-[#888888]">Rule:</span>
-                                  <code className="bg-[#F5F5F5] px-2 py-0.5 rounded text-[#111111]">
-                                    {req.expression || (req.rule_definition?.metric ? `${req.rule_definition.metric} ${req.rule_definition.operator} ${req.rule_definition.target_value}` : JSON.stringify(req.rule_definition))}
-                                  </code>
+                                  </div>
                                 </div>
 
-                                <div className="flex items-center gap-3">
-                                  <span className={`text-[10px] font-mono px-2 py-0.5 rounded ${
-                                    confidencePassed ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
-                                  }`}>
-                                    Confidence Gate: {Math.round(confidence * 100)}% ({confidencePassed ? 'Passed' : 'Needs Review'})
-                                  </span>
+                                {/* 2. Why did it get that result? */}
+                                <div className={`p-2.5 rounded-xl text-xs flex items-start gap-2 ${
+                                  isVerified
+                                    ? 'bg-emerald-50/60 border border-emerald-100 text-emerald-900'
+                                    : isReview
+                                    ? 'bg-amber-50/70 border border-amber-100 text-amber-900'
+                                    : 'bg-[#FAFAFA] border border-[#EEEEEE] text-[#555555]'
+                                }`}>
+                                  <div className="pt-0.5 shrink-0">
+                                    {isVerified ? (
+                                      <Check className="w-3.5 h-3.5 text-emerald-700" />
+                                    ) : isReview ? (
+                                      <AlertTriangle className="w-3.5 h-3.5 text-amber-700" />
+                                    ) : (
+                                      <FileText className="w-3.5 h-3.5 text-[#888888]" />
+                                    )}
+                                  </div>
+                                  <p className="leading-relaxed">
+                                    {resultExplanation}
+                                  </p>
+                                </div>
 
+                                {/* 3. Supporting Evidence (if available) */}
+                                {evidenceFile && (
+                                  <div className="space-y-1.5 text-xs">
+                                    <div className="flex items-center gap-1.5 text-[#666666]">
+                                      <span className="text-[11px] font-semibold text-[#888888] uppercase">Evidence:</span>
+                                      <span className="font-mono bg-[#F5F5F5] px-2 py-0.5 rounded text-[#111111]">
+                                        {evidenceFile}
+                                      </span>
+                                    </div>
+                                    {verbatimSnippet && (
+                                      <blockquote className="italic text-[#444444] border-l-2 border-[#CCCCCC] pl-2.5 py-0.5 text-xs bg-[#FAFAFA] rounded-r">
+                                        &ldquo;{verbatimSnippet}&rdquo;
+                                      </blockquote>
+                                    )}
+                                  </div>
+                                )}
+
+                                {/* 4. What should the user do next? & Progressive Disclosure Toggle */}
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-[#F5F5F5]">
+                                  {/* Obvious User Next Action */}
+                                  <div className="flex items-center gap-2">
+                                    {isMissing && (
+                                      <button
+                                        onClick={() => setShowEviModal(true)}
+                                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#111111] hover:bg-black text-white text-xs font-semibold cursor-pointer shadow-2xs"
+                                      >
+                                        <Upload className="w-3.5 h-3.5" />
+                                        <span>+ Add Evidence</span>
+                                      </button>
+                                    )}
+                                    {isStale && (
+                                      <button
+                                        onClick={handleReplayVerification}
+                                        disabled={isVerifying}
+                                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-900 hover:bg-amber-950 text-white text-xs font-semibold cursor-pointer shadow-2xs"
+                                      >
+                                        <RotateCw className="w-3.5 h-3.5" />
+                                        <span>Re-verify Now</span>
+                                      </button>
+                                    )}
+                                    {isReview && (
+                                      <button
+                                        onClick={() => setExpandedTrailReqId(isExpanded ? null : req.req_id)}
+                                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-semibold cursor-pointer"
+                                      >
+                                        <AlertCircle className="w-3.5 h-3.5 text-amber-700" />
+                                        <span>Review Quoted Text</span>
+                                      </button>
+                                    )}
+                                    {isVerified && (
+                                      <button
+                                        onClick={() => setShowEviModal(true)}
+                                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-[#DDDDDD] bg-white hover:bg-[#F5F5F5] text-xs font-medium text-[#111111] cursor-pointer"
+                                      >
+                                        <span>View Evidence Files</span>
+                                      </button>
+                                    )}
+                                  </div>
+
+                                  {/* Progressive Disclosure Toggle */}
                                   <button
                                     onClick={() => setExpandedTrailReqId(isExpanded ? null : req.req_id)}
-                                    className="text-xs font-semibold text-[#111111] hover:underline flex items-center gap-1 cursor-pointer"
+                                    className="text-xs font-medium text-[#666666] hover:text-[#111111] flex items-center gap-1 cursor-pointer self-start sm:self-auto"
+                                    title="View underlying rule expression and verification details"
                                   >
-                                    <span>{isExpanded ? 'Hide Trail' : 'Why this result?'}</span>
+                                    <span>{isExpanded ? 'Hide Details' : 'How was this checked?'}</span>
                                     {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                                   </button>
                                 </div>
+
+                                {/* 5. Technical Details (Progressive Disclosure) */}
+                                {isExpanded && (
+                                  <div className="mt-3 p-4 rounded-xl bg-[#FAFAFA] border border-[#EEEEEE] space-y-3 animate-in fade-in duration-150">
+                                    <div className="flex items-center justify-between border-b border-[#EAEAEA] pb-2">
+                                      <span className="text-[10px] uppercase font-mono tracking-wider font-bold text-[#111111]">
+                                        Technical Verification Details
+                                      </span>
+                                      <span className="text-[10px] font-mono text-emerald-700 font-semibold">
+                                        Deterministic AST Check
+                                      </span>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                                      <div className="p-3 bg-white rounded-lg border border-[#E5E5E5] space-y-1">
+                                        <span className="text-[10px] font-mono uppercase text-[#888888] block">Evaluated Rule</span>
+                                        <code className="text-xs font-mono font-bold text-[#111111] block">
+                                          {trail?.rule || req.expression || req.title}
+                                        </code>
+                                        <p className="text-[10px] text-[#666666]">
+                                          Parsed without eval() using recursive descent AST grammar.
+                                        </p>
+                                      </div>
+
+                                      <div className="p-3 bg-white rounded-lg border border-[#E5E5E5] space-y-1">
+                                        <span className="text-[10px] font-mono uppercase text-[#888888] block">Extracted Fact Value</span>
+                                        <p className="font-mono text-xs font-semibold text-[#111111]">
+                                          {JSON.stringify(verif?.provenance?.extracted_value || trail?.extracted_value || 'None')}
+                                        </p>
+                                        <p className="text-[10px] text-[#666666]">
+                                          Extraction confidence: {Math.round(confidence * 100)}% (threshold 75%).
+                                        </p>
+                                      </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                      <div className="p-3 bg-white rounded-lg border border-[#E5E5E5] space-y-1">
+                                        <span className="text-[10px] font-mono uppercase text-[#888888] block">Evidence Integrity Hash</span>
+                                        <p className="text-[11px] font-mono text-[#555555] truncate">
+                                          {verif?.provenance?.evidence_sha256 || trail?.sha256 || 'SHA-256 pending'}
+                                        </p>
+                                      </div>
+
+                                      <div className="p-3 bg-white rounded-lg border border-[#E5E5E5] space-y-1">
+                                        <span className="text-[10px] font-mono uppercase text-[#888888] block">Audit ID</span>
+                                        <p className="text-[11px] font-mono text-[#555555] truncate">
+                                          {verif?.audit_hash || 'Pending verification run'}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
                               </div>
-
-                              {/* Evidence Trail Breakdown */}
-                              {isExpanded && (
-                                <div className="mt-3 p-4 rounded-xl bg-[#FAFAFA] border border-[#EEEEEE] space-y-3 animate-in fade-in duration-150">
-                                  <div className="flex items-center justify-between border-b border-[#EAEAEA] pb-2">
-                                    <span className="text-[10px] uppercase font-mono tracking-wider font-bold text-[#111111]">
-                                      Evidence Trail & Proof Resolution
-                                    </span>
-                                    <span className="text-[10px] font-mono text-emerald-700 font-semibold">
-                                      Deterministic Proof Chain
-                                    </span>
-                                  </div>
-
-                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                                    <div className="p-3 bg-white rounded-lg border border-[#E5E5E5] space-y-1">
-                                      <span className="text-[10px] font-mono uppercase text-[#888888] block">1. Evaluated Rule</span>
-                                      <code className="text-xs font-mono font-bold text-[#111111] block">
-                                        {trail?.rule || req.expression || req.title}
-                                      </code>
-                                      <p className="text-[10px] text-[#666666]">
-                                        Evaluated via safe recursive AST parser without eval()
-                                      </p>
-                                    </div>
-
-                                    <div className="p-3 bg-white rounded-lg border border-[#E5E5E5] space-y-1">
-                                      <span className="text-[10px] font-mono uppercase text-[#888888] block">2. Ingested Evidence Source</span>
-                                      <span className="font-semibold text-[#111111] block truncate">
-                                        {verif?.provenance?.evidence_file || trail?.source_file || 'chronicle_v2_evaluation_report.txt'}
-                                      </span>
-                                      <span className="text-[10px] font-mono text-[#888888] block truncate">
-                                        SHA-256: {verif?.provenance?.evidence_sha256 || trail?.sha256 || '2d68897d08d3...'}
-                                      </span>
-                                    </div>
-                                  </div>
-
-                                  <div className="p-3 bg-white rounded-lg border border-[#E5E5E5] space-y-1 text-xs">
-                                    <span className="text-[10px] font-mono uppercase text-[#888888] block">3. Verbatim Quoted Span</span>
-                                    <blockquote className="italic text-[#333333] border-l-2 border-[#111111] pl-2 py-0.5 text-xs">
-                                      &ldquo;{verif?.provenance?.verbatim_snippet || trail?.verbatim_snippet || 'Evaluation benchmark accuracy reached 92.4% on complex rule parsing tests...'}&rdquo;
-                                    </blockquote>
-                                  </div>
-
-                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                                    <div className="p-3 bg-white rounded-lg border border-[#E5E5E5] space-y-1">
-                                      <span className="text-[10px] font-mono uppercase text-[#888888] block">4. Extracted Fact & Gate</span>
-                                      <p className="font-mono text-xs font-semibold text-[#111111]">
-                                        Value: {JSON.stringify(verif?.provenance?.extracted_value || trail?.extracted_value || 92.4)}
-                                      </p>
-                                      <p className="text-[10px] text-[#666666]">
-                                        Extraction confidence {Math.round(confidence * 100)}% passed 75% gate.
-                                      </p>
-                                    </div>
-
-                                    <div className="p-3 bg-white rounded-lg border border-[#E5E5E5] space-y-1">
-                                      <span className="text-[10px] font-mono uppercase text-[#888888] block">5. Deterministic Decision</span>
-                                      <p className="text-xs font-semibold text-emerald-800">
-                                        {verif?.deterministic_evaluation?.explanation || trail?.why || 'Constraint satisfies threshold.'}
-                                      </p>
-                                      <p className="text-[10px] font-mono text-[#888888] truncate">
-                                        Fingerprint: {verif?.audit_hash || 'ver_84fa1b84e2'}
-                                      </p>
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
                             </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })
+                      )}
                     </div>
 
                     <div className="p-4 rounded-xl bg-[#F5F5F5] text-center text-xs text-[#666666]">

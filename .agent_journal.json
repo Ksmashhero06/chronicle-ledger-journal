@@ -17,23 +17,15 @@
       "finding": "Implemented evidence normalization layer, confidence gate (< 0.75 routed to NEEDS_REVIEW), evidence trail explainability dict, stale detection in storage, test-rule lab endpoint, and explainable weighted readiness scoring. All 17 tests in test_api, test_evaluator, and test_parser pass."
     },
     {
-      "step_number": 15,
-      "action": "Staged and committed all Chronicle Ledger v2 enhancements, safe AST parser, Rule Test Lab, and production audit fixes to GitHub",
-      "finding": "Clean commit including custom recursive descent AST rule parser, rule test lab modal, verification replay, confidence gating, explainable weighted readiness scoring, and documentation updates."
+      "step_number": 16,
+      "action": "Applied mandatory user-centric UI design rules and progressive disclosure to Chronicle Ledger v2 interface",
+      "finding": "Created .agents/rules/ui_user_perspective.md encoding the user-first design mandate. Refactored components/journal-dashboard.tsx so user goals, clear status badges (Verified, Needs Review, Missing Evidence, Evidence Changed), plain-English explanations, and direct next action buttons appear first, while technical AST/SHA-256 traces are progressively disclosed behind 'How was this checked?'. Verified with passing Next.js production build and 17/17 pytest tests."
     }
   ],
   "active_files": [
+    ".agents/rules/ui_user_perspective.md",
     "components/journal-dashboard.tsx",
-    "components/rule-lab-modal.tsx",
-    "backend/engine/rule_parser.py",
-    "backend/engine/deterministic_evaluator.py",
-    "backend/services/evidence_normalizer.py",
-    "backend/services/storage_service.py",
-    "backend/services/ai_service.py",
-    "lib/verification-api.ts",
-    "README.md",
-    ".agent_code_map.md",
     ".agent_journal.json"
   ],
-  "next_step": "Push commits to remote origin/main on GitHub"
+  "next_step": "Commit and push user-centric UI enhancements to GitHub repository"
 }
