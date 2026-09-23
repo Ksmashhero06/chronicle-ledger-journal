@@ -1,40 +1,63 @@
 # Chronicle Ledger v2
 
-Chronicle Ledger v2 is a tool for checking whether a software project satisfies its requirements using evidence. It uses Amazon Bedrock to extract values and claims from documents and logs, then evaluates those values with a deterministic Python rule engine.
+Chronicle Ledger v2 is a requirement verification and readiness platform for software projects. It converts rubric or compliance guidelines into structured rules, extracts relevant information from project files and logs, and evaluates those rules deterministically with a Python AST engine.
+
+---
 
 ## Why this exists
 
-When preparing a project for a hackathon, security review, or release, requirements live in one place (rubrics, compliance PDFs, issue trackers) and evidence lives in another (git logs, deploy outputs, test reports, architecture diagrams).
+When preparing a project for a hackathon, release audit, or compliance review, requirements live in one place (rubrics, guideline PDFs, issue trackers) and supporting materials live in another (git logs, deploy outputs, test reports, architecture documents).
 
-Checking whether every requirement is met usually involves a developer manually cross-referencing files against a checklist. This is slow, prone to confirmation bias, and difficult for outside reviewers or judges to audit.
+Checking whether every requirement is met usually involves a developer manually cross-referencing files against a checklist. This is slow, prone to confirmation bias, and difficult for outside reviewers or judges to inspect.
 
-Asking an LLM "does this project meet requirement X?" does not solve the problem. Large models frequently hallucinate compliance, treat vague mentions as proof, and cannot explain their arithmetic.
+Asking a generic LLM *"does this project meet requirement X?"* does not solve the problem:
+- Large models frequently hallucinate compliance.
+- They treat vague text mentions as proof.
+- They cannot reliably explain arithmetic or Boolean logic.
 
-We separated the problem into two parts:
-1. **Extraction (probabilistic)**: Bedrock reads unstructured material (PDFs, logs, markdown) and pulls out the specific variables needed (e.g. `accuracy = 92.4`, `license = "MIT"`, `deployed_url = "https://..."`).
-2. **Evaluation (deterministic)**: A Python engine evaluates mathematical and Boolean rules (e.g. `accuracy >= 90.0 AND license == "MIT"`) against those variables.
+We separated the problem into two distinct stages:
 
-The model never decides the final verdict. It only populates values for the rule evaluator.
+1. **Extraction (probabilistic)**: Amazon Bedrock reads unstructured project materials (PDFs, logs, markdown) and extracts only the specific variables needed (e.g. `accuracy = 92.4`, `license = "MIT"`, `deployed_url = "https://..."`).
+2. **Evaluation (deterministic)**: A Python AST engine evaluates mathematical and Boolean rules (e.g. `accuracy >= 90.0 AND license == "MIT"`) against those extracted variables without using `eval()`.
+
+The AI model never decides the final verdict. It only populates values for the deterministic rule evaluator.
+
+---
+
+## UX Principle: System Investigation, Not Detective Work
+
+> *“Never make the user prove that they are a detective; let the system do the investigation, and only call something evidence after the system has established that it supports a requirement.”*
+
+Chronicle Ledger structures user interaction around a simple four-stage workflow:
+
+$$\text{Source Material} \longrightarrow \text{Extraction} \longrightarrow \text{Check} \longrightarrow \text{Result}$$
+
+- **Before evaluation**: The UI refers only to *Supporting Material*, *Source Files*, *Logs*, or *Project Data*. It never assumes an uploaded file is valid evidence.
+- **After extraction**: The UI reports *Extracted Values*, *Detected Information*, and *Source Locations*.
+- **After evaluation**: The UI delivers objective outcomes: **Satisfied**, **Needs Review**, or **Missing Material**.
+- **Progressive disclosure**: Technical details (SHA-256 integrity hashes, AST grammar nodes, and character spans) remain accessible in an optional *Processing Details* drawer rather than overwhelming first-time users.
+
+---
 
 ## How verification works
 
 ```
 Requirements Document ────► Requirement Compiler (Safe Tiny AST Parser)
                                     │
-Evidence Files                      ▼
-  (PDF, Git log, JSON, CLI)    Structured Rule (e.g. accuracy >= 90)
+Supporting Material                 ▼
+ (Logs, README, JSON, CLI)    Structured Rule (e.g. accuracy >= 90.0)
         │                           │
         ▼                           │
- Evidence Normalization Layer       │
+ Material Normalization             │
         │                           │
         ▼                           │
- Bedrock Fact Extraction            │
+ Bedrock Information Extraction     │
         │                           │
         ▼                           │
- Evidence Confidence Gate (< 0.75 ─► NEEDS_REVIEW)
+ Confidence Gate (< 0.75 ───────────┼────────► NEEDS_REVIEW
         │                           │
         ▼                           │
- Extracted Facts + Exact Spans      │
+ Detected Values + Source Spans     │
         │                           │
         └─────────────────┬─────────┘
                           │
@@ -43,77 +66,83 @@ Evidence Files                      ▼
                           │
              ┌────────────┼────────────┐
              ▼            ▼            ▼
-        PROVEN_TRUE  PROVEN_FALSE  NEEDS_REVIEW
+         Satisfied   Not Satisfied  Needs Review
              │
-             ├────────► Evidence Trail ("Why this result?")
-             ├────────► Verification Replay & Stale Detection
+             ├────────► Explainable Result Trail ("Why this result?")
+             ├────────► Verification Replay & Material Stale Detection
              ▼
-    Weighted Readiness Score + SHA-256 Provenance Ledger
+    Weighted Readiness Score + SHA-256 Material Fingerprint
 ```
 
-### The 5 Core Verification Systems
+### Core Verification Architecture
 
 1. **Requirement Compiler & Safe Rule Language**:
-   Instead of executing arbitrary Python code via `eval()`, Chronicle Ledger compiles natural language requirements into a restricted, safe Abstract Syntax Tree (AST). It only parses explicit operators (`AND`, `OR`, `NOT`, `==`, `!=`, `<`, `<=`, `>`, `>=`) and identifiers.
+   Instead of executing arbitrary Python code via `eval()`, Chronicle Ledger compiles requirements into a restricted, safe Abstract Syntax Tree (`rule_parser.py`). It parses explicit operators (`AND`, `OR`, `NOT`, `==`, `!=`, `<`, `<=`, `>`, `>=`) and identifiers using recursive descent.
 
-2. **Evidence Normalization Layer**:
-   Before extraction, heterogeneous formats (PDFs, Markdown docs, Git commit histories, JSON outputs, CLI deploy traces) are normalized into a canonical internal schema with cryptographic SHA-256 hashing.
+2. **Material Normalization Layer**:
+   Heterogeneous formats (PDFs, Markdown docs, Git commit histories, JSON outputs, CLI deploy logs) are normalized into a canonical schema with cryptographic SHA-256 hashing.
 
-3. **Evidence Confidence Gate**:
-   AI extraction is probabilistic; rule evaluation is deterministic. When extraction confidence falls below the 0.75 threshold, the system halts automatic qualification and routes the requirement to `NEEDS_REVIEW` with an explicit human-in-the-loop notice.
+3. **Confidence Gate**:
+   AI extraction is probabilistic; rule evaluation is deterministic. When extraction confidence falls below `0.75`, the system routes the requirement to `Needs Review` with human-in-the-loop inspection.
 
-4. **Evidence Trail ("Why this result?")**:
-   Every verification result produces an explainable proof chain:
-   `Requirement → Rule AST → Evidence File (SHA-256) → Citation Quote → Extracted Fact → Evaluation Decision → Cryptographic Audit Fingerprint`.
+4. **Explainable Result Trail**:
+   Every check produces a transparent chain:
+   `Requirement → Rule AST → Source Material (SHA-256) → Quoted Snippet → Detected Value → Check Result → Evaluation ID`.
 
-5. **Verification Replay & Stale Detection**:
-   When active evidence changes or new files are uploaded, Chronicle Ledger compares the active SHA-256 hash against the verified record hash. If they differ, the verification is automatically flagged as `STALE`, offering one-click reproducible re-evaluation.
+5. **Verification Replay & Stale Material Detection**:
+   When supporting files are modified or re-uploaded, Chronicle Ledger compares the active SHA-256 hash against the evaluated record. If they differ, the status is flagged as `Material Changed`, providing one-click reproducible re-evaluation.
 
-6. **Explainable Weighted Readiness Scoring**:
+6. **Interactive Rule Test Lab**:
+   Engineers can test custom Boolean rules in real-time (`/api/verification/test-rule`) against mock facts to preview parser evaluation trees and decisions before applying them to a live project.
+
+7. **Explainable Weighted Readiness Scoring**:
    Readiness is calculated transparently using category and severity weights:
-   `Readiness = (∑ [Severity Weight × Result Credit]) / (∑ Total Weight) × 100%`
-   - Severity Weights: Critical (3x), Important (2x), Recommended (1x).
-   - Result Credits: Verified = 1.0, Needs Review = 0.25, Missing = 0.0.
+   $$\text{Readiness} = \frac{\sum (\text{Severity Weight} \times \text{Result Credit})}{\sum \text{Total Weight}} \times 100\%$$
+   - **Severity Weights**: Critical (3x), Important (2x), Recommended (1x).
+   - **Result Credits**: Satisfied = 1.0, Needs Review = 0.25, Missing Material = 0.0.
 
+---
 
 ## Examples
 
-### 1. Passing verification (`PROVEN_TRUE`)
+### 1. Requirement Satisfied
 ```text
-Requirement:   Model validation accuracy must be at least 90.0%
-Rule:          accuracy >= 90.0
-Evidence file: evaluation_report.txt (SHA-256: dfb4a730...)
-Extracted:     accuracy = 92.4 (confidence: 0.94, chars 61–151)
-Evaluation:    92.4 >= 90.0
-Result:        PROVEN_TRUE
+Requirement:      Model validation accuracy must be at least 90.0%
+Rule Checked:     accuracy >= 90.0
+Source Material:  evaluation_report.txt (SHA-256: dfb4a730...)
+Detected Value:   accuracy = 92.4 (confidence: 94%, chars 61–151)
+Evaluation:       92.4 >= 90.0
+Result:           Satisfied ("This requirement was satisfied based on the supplied material.")
 ```
 
-### 2. Failing verification (`PROVEN_FALSE`)
+### 2. Requirement Not Satisfied
 ```text
-Requirement:   Test suite line coverage must be at least 80.0%
-Rule:          coverage >= 80.0
-Evidence file: coverage_report.txt (SHA-256: 8a1b2c3d...)
-Extracted:     coverage = 63.5 (confidence: 0.91, chars 12–48)
-Evaluation:    63.5 >= 80.0
-Result:        PROVEN_FALSE
+Requirement:      Test suite line coverage must be at least 80.0%
+Rule Checked:     coverage >= 80.0
+Source Material:  coverage_report.txt (SHA-256: 8a1b2c3d...)
+Detected Value:   coverage = 63.5 (confidence: 91%, chars 12–48)
+Evaluation:       63.5 >= 80.0
+Result:           Not Satisfied ("Evaluated false: detected 63.5% does not satisfy >= target 80.0%.")
 ```
 
-### 3. Insufficient evidence (`EVIDENCE_INSUFFICIENT`)
+### 3. Missing Material / Insufficient Information
 ```text
-Requirement:   Publicly accessible AWS deployment URL
-Rule:          public_url_exists == true AND host == "aws"
-Evidence file: README.md
-Extracted:     mentions AWS deployment, but no live URL found
-Evaluation:    missing required variable: public_url
-Result:        EVIDENCE_INSUFFICIENT
+Requirement:      Publicly accessible AWS deployment URL
+Rule Checked:     public_url_exists == true AND host == "aws"
+Source Material:  README.md
+Detected Value:   Mentions AWS deployment, but no live URL found
+Evaluation:       Missing required variable: public_url
+Result:           Missing Material ("No uploaded document or log matches this requirement yet.")
 ```
+
+---
 
 ## AWS Architecture
 
-The backend is built as a serverless service on AWS using SAM:
+The backend is deployed as a serverless service on AWS using AWS SAM:
 
 ```
-Browser (Next.js)
+Browser (Next.js 15)
        │
 Amazon API Gateway (HTTP API)
        │
@@ -122,16 +151,18 @@ AWS Lambda (Python 3.12, ARM64 Graviton)
  ┌─────┼─────────────────────┐
  ▼     ▼                     ▼
 Amazon DynamoDB         Amazon Bedrock
- (Projects & Ledger)   (Claude Model Family)
+ (Projects & Ledger)   (Claude 3.5 / 3.7 Sonnet)
 ```
 
 | Service | Role |
 | :--- | :--- |
-| **AWS Lambda (ARM64)** | Runs the FastAPI application via Mangum. Handles rule evaluation, evidence hashing, and report generation. |
+| **AWS Lambda (ARM64)** | Runs the FastAPI backend via Mangum. Handles rule compilation, material hashing, and deterministic AST evaluation. |
 | **Amazon API Gateway** | HTTP API routing traffic to Lambda (`/api/verification/*`, `/api/projects/*`, `/health`). |
-| **Amazon DynamoDB** | Stores project definitions, extracted requirements, evidence metadata, and audit records with on-demand capacity. |
-| **Amazon Bedrock** | Extracts structured fields from unstructured requirement specs and evidence files. Configured via `BEDROCK_MODEL_ID`. |
-| **Amazon S3** | Object storage for uploaded evidence files and generated reports. |
+| **Amazon DynamoDB** | Stores project definitions, extracted requirements, material metadata, and audit records with on-demand capacity. |
+| **Amazon Bedrock** | Extracts structured fields from unstructured requirement specs and project materials. Configured via `BEDROCK_MODEL_ID`. |
+| **Amazon S3** | Object storage for uploaded project materials and generated readiness reports. |
+
+---
 
 ## Project Structure
 
@@ -139,35 +170,49 @@ Amazon DynamoDB         Amazon Bedrock
 chronicle-ledger-journal/
 ├── backend/                     # Python 3.12+ FastAPI backend
 │   ├── engine/
-│   │   ├── deterministic_evaluator.py # AST-based rule evaluator
-│   │   └── rule_schema.py             # Pydantic schemas (rules, evidence, citations)
+│   │   ├── rule_parser.py             # Safe AST tokenizer & recursive descent parser
+│   │   ├── deterministic_evaluator.py # AST-based rule evaluator & readiness scorer
+│   │   └── rule_schema.py             # Pydantic data schemas
 │   ├── services/
 │   │   ├── ai_service.py              # Bedrock client & fallback extractor
-│   │   ├── provenance_service.py      # SHA-256 hashing & span locator
+│   │   ├── provenance_service.py      # SHA-256 hashing & source span locator
 │   │   └── storage_service.py         # DynamoDB / JSON storage adapter
-│   ├── tests/                         # Backend pytest suite (9 tests)
-│   ├── main.py                        # FastAPI endpoints & Lambda handler
+│   ├── tests/                         # Pytest suite (18 unit & integration tests)
+│   │   ├── test_parser.py             # AST grammar, operator & safety tests
+│   │   ├── test_evaluator.py          # Deterministic evaluation & readiness tests
+│   │   └── test_api.py                # FastAPI endpoints & error handling tests
+│   ├── main.py                        # FastAPI routes, correlation ID middleware & Lambda handler
 │   └── requirements.txt
-├── components/                  # Next.js UI components
-│   ├── journal-dashboard.tsx    # Main workspace & Verification mode
-│   ├── requirement-modal.tsx    # Rule builder & import
-│   ├── evidence-modal.tsx       # Evidence upload & hash preview
-│   ├── dossier-modal.tsx        # Verification report generator
-│   └── telemetry-modal.tsx      # Bedrock invocation & agent activity
-├── infrastructure/              # AWS deployment files
+├── app/                         # Next.js 15 App Router
+│   ├── not-found.tsx            # Custom branded 404 page
+│   ├── error.tsx                # Custom branded 500 error boundary
+│   ├── layout.tsx               # Root layout & theme configuration
+│   └── page.tsx                 # Application entry point
+├── components/                  # UI components
+│   ├── journal-dashboard.tsx    # Verification workspace & readiness dashboard
+│   ├── requirement-modal.tsx    # Requirement & rule ingestion modal
+│   ├── evidence-modal.tsx       # Supporting material upload modal
+│   ├── rule-lab-modal.tsx       # Interactive rule test lab modal
+│   ├── dossier-modal.tsx        # Readiness report exporter
+│   ├── telemetry-modal.tsx      # Agent activity & Bedrock telemetry modal
+│   ├── product-error-view.tsx   # Reusable user-friendly error views
+│   └── error-boundary.tsx       # React component error boundary
+├── infrastructure/              # AWS deployment configuration
 │   ├── template.yaml            # AWS SAM serverless template
 │   ├── deploy-aws.sh            # Linux/macOS deployment script
 │   └── deploy-aws.ps1           # Windows deployment script
-├── lib/                         # Client types and API wrappers
+├── lib/                         # TypeScript types, API client & verification client
 └── package.json                 # Next.js 15 configuration
 ```
+
+---
 
 ## Local Development
 
 ### Prerequisites
 - Node.js 18+ and npm
 - Python 3.12+
-- AWS credentials configured locally (if testing Bedrock calls)
+- AWS credentials configured locally (if invoking Amazon Bedrock)
 
 ### 1. Frontend (Next.js)
 ```bash
@@ -184,9 +229,11 @@ uvicorn main:app --reload --port 8000
 ```
 API runs at `http://localhost:8000`. Health check: `http://localhost:8000/health`.
 
+---
+
 ## AWS Deployment
 
-The backend deploys through AWS SAM.
+The backend deploys using AWS SAM.
 
 ### Prerequisites
 - AWS CLI configured (`aws configure`)
@@ -217,13 +264,18 @@ To configure the Bedrock model:
 sam deploy --parameter-overrides BedrockModelId=us.anthropic.claude-3-7-sonnet-20250219-v1:0
 ```
 
+---
+
 ## Testing
 
 ### Backend unit and integration tests
 ```bash
-python -m pytest backend/tests/
+python -m pytest backend/tests/ -v
 ```
-Runs 9 test cases covering numeric comparisons, missing evidence, low-confidence handling, presence rules, and API routes.
+Runs 18 test cases across:
+- `test_parser.py`: Safe AST recursive descent grammar, operators (`AND`, `OR`, `NOT`, comparisons), and code injection prevention (eval rejection).
+- `test_evaluator.py`: Numeric comparisons, missing material fallback, low-confidence routing, presence rules, and weighted readiness scoring.
+- `test_api.py`: FastAPI project endpoints, full verification lifecycle, rule test lab API, and structured error responses.
 
 ### Frontend production build
 ```bash
@@ -231,16 +283,22 @@ npm run build
 ```
 Validates TypeScript types and static page generation.
 
+---
+
 ## Hackathon Context
 
 We built Chronicle Ledger v2 for the **AWS Builder Center — Zero to Shipped 2026 Hackathon** in the **Workplace Efficiency** category under the **Community** lane.
 
 The development was conducted using an AI coding agent connected to AWS via the **AWS MCP Server** and **Agent Toolkit**, automating SAM infrastructure configuration, test runs, and deployment diagnostics.
 
+---
+
 ## Version History
 
 - **Chronicle Ledger v1**: A developer logging and Socratic journaling application built on Google Cloud Run and Firebase. It established the initial concepts of persistent audit logs and developer session tracking.
-- **Chronicle Ledger v2**: A standalone requirement verification system built on AWS (Lambda, Bedrock, DynamoDB, API Gateway). It uses the v1 lineage for its historical records concept, but the verification engine and AWS infrastructure run completely independently.
+- **Chronicle Ledger v2**: A standalone requirement verification and readiness platform built on AWS (Lambda, Bedrock, DynamoDB, API Gateway). It uses the v1 lineage for its historical records concept, but the verification engine and AWS infrastructure run completely independently.
+
+---
 
 ## License
 

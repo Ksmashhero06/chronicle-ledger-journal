@@ -25,14 +25,16 @@
       "step_number": 18,
       "action": "Aligned UI terminology with user-first supporting material UX model and progressive disclosure",
       "finding": "Eliminated detective/auditor jargon (Attach Evidence -> Add Supporting Material, Evidence Format -> File / Content Type, submission_proof.txt -> submission_notes.txt, Verified -> Satisfied, Missing Evidence -> Missing Material, Evidence Changed -> Material Changed). Positioned SHA-256 and AST grammar under clean 'Processing Details' progressive disclosure. All 18 pytest tests and Next.js 15 production build pass cleanly."
+    },
+    {
+      "step_number": 19,
+      "action": "Updated README.md to reflect user-first supporting material model and complete project architecture",
+      "finding": "Rewrote README.md with the UX Principle ('Never make the user prove that they are a detective'), 4-stage pipeline (Source Material -> Extraction -> Check -> Result), full project directory structure including rule_parser.py and custom error views, and updated testing suite to 18 test cases."
     }
   ],
   "active_files": [
-    "components/evidence-modal.tsx",
-    "components/journal-dashboard.tsx",
-    "components/requirement-modal.tsx",
-    "components/dossier-modal.tsx",
+    "README.md",
     ".agent_journal.json"
   ],
-  "next_step": "Commit and push supporting material UX updates to GitHub repository"
+  "next_step": "Commit and push README updates to GitHub repository"
 }
